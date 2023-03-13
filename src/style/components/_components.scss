@@ -1,0 +1,130 @@
+.login-layout{
+    width:100%;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .login-card-layout{
+        width: 90%;
+        height: 90%;
+        padding: 0;
+        border-radius: 15px;
+        background-color: white;
+        .login-card-img{
+            width:100%;
+            height: 100%;        
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position:relative;
+            img{
+                width: 85%;
+                height: 90%;
+                border-radius: 15px;
+            }
+        }
+        .login-form-card{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            // justify-content: center;
+            margin-left: 4rem;
+            align-items: center;
+            .login-form{
+                width: 60%;
+                height: 85%;
+                .login-form-head{
+                    width: 100%;
+                    position: relative;
+                    // display: inline-flex;
+                    .left-head{
+                        span:nth-child(1){
+                            font-size: 0.7rem;
+                        }
+                        .login-label{
+                            font-size: 1.3rem;
+                            font-weight:bolder;
+                        }
+                    }
+                    .right-head{
+                        position: absolute;
+                        right:1px;
+                        top:1px;
+                        select{
+                            font-size: 0.8rem;
+                            border-radius: 5px;
+                            padding: 3px 1px;
+                            background-color: rgba(238, 236, 236, 0.637);
+                            color:rgb(114, 113, 113);
+                            border: 1px solid rgb(114, 113, 113);
+                        }
+                    }
+                }
+                .form-label{
+                    font-size: 0.8rem;
+                }
+                .form-input{
+                    width: 100%;
+                    height: 2rem;
+                    font-size: 0.8rem;
+                    padding-left: 1rem;
+                    outline:none;
+                    background-color: #fff;
+                    border:1px solid rgb(232, 232, 232);
+                }
+                .login-now{
+                    width: 100%;
+                    height: 2.5rem;
+                    font-size: 0.8rem;
+                    border-radius: 3px;
+                    background-color: rgb(87, 188, 101);
+                    color:#fff;
+                    border:none;
+                }
+                .google-login{
+                    width: 100%;
+                    height: 2.5rem;
+                    font-size: 0.8rem;
+                    border-radius: 3px;
+                    background-color: rgb(45, 45, 66);
+                    color:#fff;
+                    border:none;
+                }
+            }
+        }
+    }
+}
+
+.product-box{
+    width: 100%;
+    height: 7rem;
+    background-color: #F9F9F9;
+    .p-box-title{
+        // margin-top: 2rem;
+        .p-name{
+            font-size: 0.9rem;
+            color:#282828;
+        }
+        .p-units{
+            font-size: 0.7rem;
+        }
+    }
+    .pid{
+        font-size: 0.7rem;
+        color:#525252;
+        margin-top: 3rem;
+    }
+    .qr-status{
+        font-size: 0.8rem;
+        color:#008000;
+    }
+
+    .btn-link{
+     margin-left: 0!important;
+    }
+    .btn-link:hover{
+        font-size: 0.8rem;
+        color:#008000;
+        margin-left: 0!important;
+    }
+}

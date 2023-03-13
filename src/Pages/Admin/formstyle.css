@@ -1,0 +1,33 @@
+.mainbox{
+    margin: auto;
+  padding: 10px;
+  padding-right: 3rem;
+}
+/* .mainbox .table-container{
+overflow-y: auto!important;
+display: flex;
+align-items: center;
+justify-content: center;
+} */
+
+.ant-table-thead > tr > th{
+
+font-family: 'Lucida Sans', 'Lucida Sans Regular';
+
+
+}
+
+
+.ant-form-item-label > label{
+font-weight: 300!important;
+font-family: 'Lucida Sans', 'Lucida Sans Regular';
+
+}
+/**error message**/
+.ant-form-item-explain .ant-form-item-explain-connected{
+text-align: left!important;
+}
+.ant-form-item-explain-error{
+color: #043484!important;
+text-align: left!important;
+}

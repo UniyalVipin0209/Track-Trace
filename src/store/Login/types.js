@@ -1,0 +1,6 @@
+export const LOGIN_DATA = "LOGIN_DATA";
+export const LOGIN_DATA_ERR = "LOGIN_DATA_ERR";
+export const SIGNUP_DATA = "SIGNUP_DATA";
+export const SIGNUP_DATA_ERR = "SIGNUP_DATA_ERR";
+export const GET_LOGIN_DETAILS = "GET_LOGIN_DETAILS";
+export const GET_LOGIN_DETAILS_ERR = "GET_LOGIN_DETAILS_ERR";

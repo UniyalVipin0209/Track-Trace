@@ -1,0 +1,47 @@
+.width100{
+    width: 100%;
+}
+.height100{
+    height: 100%;
+}
+@mixin centerContentBoxWithoutColumn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+@mixin centerContentBox {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+}
+
+@mixin centerContentBoxHorizontal{
+    display:flex;
+    justify-content:center;
+}
+
+@mixin centerContentBoxVertical{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+@mixin rootLayout{
+    width:100vw;
+    height: 100vh;
+    }
+
+
+    @mixin scrollable{
+        -ms-overflow-style: none; /* for Internet Explorer, Edge */
+        scrollbar-width: none;
+        overflow-y: scroll;
+    }
+    @mixin hoverTitleEffect{
+        color:#008DDB;
+        cursor: pointer;
+        transition:all 0.1s ease-in-out;
+    }
+    

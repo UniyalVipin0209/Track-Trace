@@ -1,0 +1,117 @@
+.items-details{
+
+    .items-details-table{
+        width:100%;
+        .tb-header{
+            width:100%;
+            // font-size: 0.8rem;
+            font-size: 0.56rem;
+            border-bottom: 1px solid rgb(189, 187, 187);
+            overflow-x: scroll;
+            overflow-y:scroll;
+            font-weight: bold;
+            .col1{ width:9%;
+            }
+            .col2{ 
+                width:10%;
+                margin-left: 5px;
+            }
+            .col3{ width:10%;
+            }
+            .col4{ width:7%;
+            }
+            .col5{ width:12%;
+            }
+            .col6{ width:14%;
+            }
+            .col7{ width:14%;
+            }
+            .col8{ width:6%;
+            }
+            .col9{ width:10%;
+            }
+            .col10{
+                width: 8%;
+            }
+        }
+        .tb-body{
+            width:100%;
+            height: 2.5rem;
+            //font-size: 0.8rem;
+            font-size: 0.62rem;
+            color:rgb(141, 139, 139);
+            border-bottom: 1px solid rgb(229, 228, 228);
+            .update-opts{
+                font-size:0.9rem;
+                .updt-otps-edit{
+                    cursor: pointer;
+                    font-size: .7rem;                    
+                    vertical-align: middle;
+                    transition: font-size 0.3s ease-in-out;
+                }
+                .updt-otps-edit:hover{
+                    cursor: pointer;
+                    font-size: .7rem;
+                    transition: font-size 0.3s ease-in-out;
+                    vertical-align: middle;
+                }
+                .updt-opts-delete{
+                    margin-left: 1rem;
+                    &:hover{
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: font-size 0.3s ease-in-out;
+                    }
+                }
+            }
+            input{
+                width:95%;
+                outline: none;
+                border-radius: 5px;
+                border:1px solid #d7d5d7;
+                &:hover{
+                    border:1px solid #512072;
+                }
+
+
+            }
+            .col1{ width:6%;
+            }
+            .col2{ width:13%;
+            }
+            .col3{ width:10%;
+            }
+            .col4{ width:7%;
+            }
+            .col5{ width:10%;
+            }
+            .col6{ width:14%;
+            }
+            .col7{ width:14%;
+            }
+            .col8{ width:6%;
+            }
+            .col9{ width:10%;
+            }
+            .col10{
+                width: 8%;
+            }
+          
+        }
+
+        .tb-footer {
+            .col-update{
+                width:90%;
+                font-size: 0.8rem;
+                border-bottom: 1px solid rgb(189, 187, 187);
+                .btnUpdate{ width:12%;
+                    background-color: #043484;
+                }   
+            }
+        } 
+        input[name="exp_date"], input[name="ph_value"]{
+            width:80%!important;
+            }
+        
+    }
+}
