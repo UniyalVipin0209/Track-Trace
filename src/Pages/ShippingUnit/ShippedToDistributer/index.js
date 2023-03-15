@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Swal from "sweetalert2";
-
+import "../style.css";
 import { PrerequistiesDistributorList } from "../ApiUtility.js";
 import axios from "axios";
 import DisplayDate from "../../DisplayDate";
@@ -327,17 +327,10 @@ const ShippedToDistributer = () => {
           <span className="main-title">Product Shipped to Distributors</span>
         </div>
         <div className="right-date">
-          {loginRole === "administratorunit" && (
-            <div>
+          {loginRole === "distributorunit" && (
+            <div className="btnGroup">
               <button
-                onClick={() => {
-                  history.push("CreateShipmentForDistributor");
-                }}
-              >
-                Create Shipment To Distributor
-              </button>
-
-              <button
+                className="btnSubmit"
                 onClick={() => {
                   history.push("/CreateShipmentForRetailer");
                 }}
@@ -346,7 +339,6 @@ const ShippedToDistributer = () => {
               </button>
             </div>
           )}
-
           <div>
             <DisplayDate></DisplayDate>
           </div>

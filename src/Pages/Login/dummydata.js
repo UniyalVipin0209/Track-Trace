@@ -27,7 +27,7 @@ export const UserDetails = [
     fullName: "Laksmi Agarwal",
     username: "distributionunit@kpmg.com",
     password: "123456",
-    role: "distributerunit",
+    role: "distributorunit",
   },
   {
     fullName: "Sambhav Ghosh",

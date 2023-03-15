@@ -290,22 +290,15 @@ const ShippingToDistributer = () => {
         </div>
 
         <div className="right-date">
-          {loginRole === "administratorunit" && (
-            <div>
+          {loginRole === "shippingunit" && (
+            <div className="btnGroup">
               <button
+                className="btnSubmit"
                 onClick={() => {
                   history.push("CreateShipmentForDistributor");
                 }}
               >
                 Create Shipment To Distributor
-              </button>
-
-              <button
-                onClick={() => {
-                  history.push("/CreateShipmentForRetailer");
-                }}
-              >
-                Create Shipment To Retailer
               </button>
             </div>
           )}

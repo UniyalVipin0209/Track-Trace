@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useReducer } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import Swal from "sweetalert2";
-
-import { ConfigForDistributionRetailerList } from "./ApiUtility.js";
+import { PrerequistiesDistributorToRetailerList } from "./ApiUtility.js";
 import axios from "axios";
 import DisplayDate from "../DisplayDate";
 import { Table } from "antd";
@@ -19,6 +18,72 @@ const RetailerUnit = () => {
   const [pageText, setPageText] = useState();
   const loginRole = localStorage.getItem("loginRole");
 
+  const columns1 = [
+    {
+      key: 1,
+      title: "Carton",
+      dataIndex: "cartonId",
+      render: (_carton) => <span className="productname">{_carton}</span>,
+      hidden: false,
+    },
+    {
+      key: 2,
+      title: "Product Name",
+      dataIndex: "productName",
+      render: (prodName) => <span className="productname">{prodName}</span>,
+      hidden: false,
+    },
+    {
+      key: 3,
+      title: "Quantity",
+      dataIndex: "quantity",
+      render(text, record) {
+        return {
+          props: {
+            style: { color: parseInt(text) > 10 ? "red" : "green" },
+          },
+          children: <div>{text + " units"}</div>,
+        };
+      },
+      hidden: false,
+    },
+    {
+      key: 4,
+      title: "Retailer Name",
+      dataIndex: "distretailName",
+      hidden: false,
+    },
+    {
+      key: 5,
+      title: "Retailer Location",
+      dataIndex: "distretailLocation",
+      width: "18%",
+      render: (distLocation) => (
+        <div>
+          <HiOutlineLocationMarker
+            style={{ fontSize: "1rem", marginLeft: "6px" }}
+          ></HiOutlineLocationMarker>
+          &nbsp;&nbsp;
+          <span className="qrcontainer wrapcontent">{distLocation}</span>
+        </div>
+      ),
+      hidden: false,
+    },
+    {
+      key: 6,
+      title: "Carbon Emmission",
+      dataIndex: "calculateEmmision",
+      hidden: false,
+    },
+    {
+      key: "7",
+      title: "Actions",
+      hidden: false,
+      render: (text, record) => {
+        return setAction(record);
+      },
+    },
+  ];
   const setAction = (record) => {
     if (record.actionStatus !== "NOTSTARTED")
       return (
@@ -93,75 +158,6 @@ const RetailerUnit = () => {
         </button>
       );
   };
-  const columns1 = [
-    {
-      key: 1,
-      title: "Carton",
-      dataIndex: "cartonId",
-      render: (_carton) => <span className="productname">{_carton}</span>,
-      hidden: false,
-    },
-    {
-      key: 2,
-      title: "Product Name",
-      dataIndex: "productName",
-      render: (prodName) => <span className="productname">{prodName}</span>,
-      hidden: false,
-    },
-    {
-      key: 2,
-      title: "Quantity",
-      dataIndex: "quantity",
-      render(text, record) {
-        return {
-          props: {
-            style: { color: parseInt(text) > 10 ? "red" : "green" },
-          },
-          children: <div>{text + " units"}</div>,
-        };
-      },
-      hidden: false,
-    },
-    {
-      key: 3,
-      title: "Distribution Name",
-      dataIndex: "distretailName",
-      hidden: false,
-    },
-    {
-      key: 4,
-      title: "Distributor Location",
-      dataIndex: "distretailLocation",
-      render: (distLocation) => (
-        <div>
-          <HiOutlineLocationMarker
-            style={{ fontSize: "1rem", marginLeft: "6px" }}
-          ></HiOutlineLocationMarker>
-          &nbsp;&nbsp;<span className="qrcontainer">{distLocation}</span>
-        </div>
-      ),
-      hidden: false,
-    },
-
-    {
-      key: 5,
-      title: "Status",
-      dataIndex: "actionStatus",
-      hidden: false,
-      render: (record) => {
-        console.log("action status ", record);
-        return checkStatus(record);
-      },
-    },
-    {
-      key: "6",
-      title: "Actions",
-      hidden: false,
-      render: (text, record) => {
-        return setAction(record);
-      },
-    },
-  ];
 
   const columns = columns1.filter((i) => i.hidden === false);
 
@@ -212,7 +208,7 @@ const RetailerUnit = () => {
   };
   const handleFetchResponse = async (res, setInfoMessage) => {
     const response = await res.data;
-    console.log("DistributorList LIST ", res);
+    console.log("Retailer LIST ", response);
 
     if (typeof response === "object" && typeof response.result == "string") {
       if (response.result.includes("error")) setInfoMessage("Error");
@@ -227,53 +223,60 @@ const RetailerUnit = () => {
     } else {
       console.log("Map--");
       let customResponse = [];
+      let filterValidRetailersRec = [];
+      filterValidRetailersRec = response.result.filter((elem) =>
+        elem.hasOwnProperty("distributorToRetailorDetails")
+      );
+      console.log("filterValidRetailersRec ", filterValidRetailersRec);
 
-      customResponse = response.result?.map((elem, idx) => {
-        const responseObject = elem.Record;
-        console.log("responseObject ", elem.Record);
+      customResponse = filterValidRetailersRec?.map((elem, idx) => {
+        const responseObject = elem.distributorToRetailorDetails;
+        console.log("responseObject ", responseObject);
+        let retailerDetails = responseObject?.retailerName.split("~");
+        let { vehicleInfo, vehicleDetails } = fetchVehicleDetails();
 
         return {
-          index: responseObject?.key,
-          cartonId: responseObject?.carton,
-          distretailName: responseObject?.distributorName,
-          productName: responseObject?.cartonproduct,
+          index: idx,
+          cartonId: elem?.key,
+          distretailName: retailerDetails[1],
+          productName: responseObject?.key,
           quantity: parseInt(responseObject?.totalUnits),
-          distretailLocation: responseObject?.distributorLocation,
-          vehicleType: responseObject?.vehicleDetails,
+          distretailLocation: responseObject?.destinationLocation,
+          // actionStatus:responseObject?.actionStatus;
+          originLocation: responseObject?.originLocation,
+          vehicleType: vehicleInfo ? vehicleDetails : "N/A",
           distanceInKms: responseObject?.distanceInKms,
+          calculateEmmision: responseObject?.calculateEmmision,
           mode: "shipping",
-          distretailPinCode: responseObject?.distretailPinCode,
-          actionStatus: responseObject?.actionStatus,
-          distretailLatitude: responseObject?.latitude,
-          distretailLongitude: responseObject?.longitude,
-          originAddress: responseObject?.originAddress,
-          originLatitude: responseObject?.originLatitude,
-          originLongitude: responseObject?.originLongitude,
-          originPincode: responseObject?.originPincode,
-
-          //vehicleType,distanceInKms
         }; //
+        function fetchVehicleDetails() {
+          let vehicleDetails;
+          let vehicleInfo = true;
+          let travelModeVal = responseObject?.travelMode;
+          if (travelModeVal === "CAR" || travelModeVal === "TRUCK") {
+            let vehicleObj = responseObject?.esgInput;
+            vehicleDetails =
+              travelModeVal === "CAR"
+                ? vehicleObj?.carDetails.carName
+                : vehicleObj?.truckDetails.truckName;
+            console.log(travelModeVal, vehicleDetails);
+          } else if (travelModeVal === "AIR") {
+            vehicleInfo = false;
+          }
+          return { vehicleInfo, vehicleDetails };
+        }
       });
       console.log("customResponse ", customResponse);
       setItemData(customResponse);
     }
   };
   useEffect(() => {
-    console.log("LR:", loginRole);
-    const text =
-      loginRole === "shippingunit"
-        ? "Shipping Unit"
-        : loginRole === "retailerunit"
-        ? "Retailer Unit"
-        : "Distributor Unit";
-    setPageText(text);
     //Code to add Api logic
-    const inputParameter = {
-      fcn: "getRetailer",
-      args: "test",
-    };
-    var { endPoint, config } =
-      ConfigForDistributionRetailerList(inputParameter);
+    // const inputParameter = {
+    //   fcn: "getRetailer",
+    //   args: "test",
+    // };
+    var { endPoint, config } = PrerequistiesDistributorToRetailerList();
     var apiResponse = fetchData(endPoint, config);
     apiResponse.then((res) => {
       handleFetchResponse(res, setInfoMessage);
@@ -302,7 +305,7 @@ const RetailerUnit = () => {
             style={{ cursor: "pointer" }}
           ></IoMdArrowRoundBack>
           {"   "}
-          <span className="main-title">Product Shipped to Distributors</span>
+          <span className="main-title">Product Shipped to Retailer</span>
         </div>
         <div className="right-date">
           <div>

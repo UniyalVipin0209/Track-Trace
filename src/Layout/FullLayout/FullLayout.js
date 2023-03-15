@@ -224,36 +224,28 @@ export const FullLayoutComponent = ({ children }) => {
       path: "/createRetailer",
     },
     {
-      title: "Shipping",
+      title: "Distributor List",
       icon: (
         <MdOutlineLocalShipping
           style={{ fontSize: "1rem" }}
         ></MdOutlineLocalShipping>
       ),
       classN: "inactive",
-      id: "shipping",
+      id: "distList",
       tabSelect: false,
-      path: "/shipping",
+      path: "/distList",
     },
     {
-      title: "Track Shipment",
-      icon: <FaShippingFast style={{ fontSize: "1rem" }}></FaShippingFast>,
-      classN: "inactive",
-      id: "trackshipment",
-      tabSelect: false,
-      path: "/TrackShipment",
-    },
-    {
-      title: "Distribution List",
+      title: "Retailer List",
       icon: (
-        <BsDistributeVertical
+        <MdOutlineLocalShipping
           style={{ fontSize: "1rem" }}
-        ></BsDistributeVertical>
+        ></MdOutlineLocalShipping>
       ),
       classN: "inactive",
-      id: "DistList",
+      id: "retailerList",
       tabSelect: false,
-      path: "/DistList",
+      path: "/retailerList",
     },
   ];
   const navigate = useHistory();
@@ -263,7 +255,7 @@ export const FullLayoutComponent = ({ children }) => {
     if (loginRole === "collectionunit") profileMenu = menuIconsCU;
     else if (loginRole === "processingunit") profileMenu = menuIconsPU;
     else if (loginRole === "shippingunit") profileMenu = menuIconsSU;
-    else if (loginRole === "distributerunit") profileMenu = menuIconsDU;
+    else if (loginRole === "distributorunit") profileMenu = menuIconsDU;
     else if (loginRole === "retailerunit") profileMenu = menuIconsRU;
     else if (loginRole === "administratorunit") profileMenu = menuIconsAU;
 
@@ -503,85 +495,60 @@ export const FullLayoutComponent = ({ children }) => {
   const changeTabAU = (id, activeStatus, path) => {
     console.log("changeTabAU ", path, id, activeStatus);
     navigate.push(path);
-
+    // distributorList,retailerList
     let x = document.getElementById("distributor");
-    let y = document.getElementById("shipping");
-    let y2 = document.getElementById("trackshipment");
-    let z = document.getElementById("DistList");
+    let y = document.getElementById("retailerList");
+    let y1 = document.getElementById("distList");
     let z1 = document.getElementById("retailer");
 
     let myState = menu;
-
-    if (id === "trackshipment") {
-      y2.classList.add("active");
-      x.classList.add("inactive");
-      y.classList.add("inactive");
-      z.classList.add("inactive");
-      z1.classList.add("inactive");
-
-      y2.classList.remove("inactive");
-      x.classList.remove("active");
-      y.classList.remove("active");
-      z.classList.remove("active");
-      z1.classList.remove("active");
-    }
     if (id === "distributor") {
       x.classList.add("active");
-      y2.classList.add("inactive");
       y.classList.add("inactive");
-      z.classList.add("inactive");
+      y1.classList.add("inactive");
       z1.classList.add("inactive");
 
       x.classList.remove("inactive");
-      y2.classList.remove("active");
       y.classList.remove("active");
-      z.classList.remove("active");
+      y1.classList.remove("active");
       z1.classList.remove("active");
-    }
-
-    if (id === "shipping") {
-      y.classList.add("active");
-      x.classList.add("inactive");
-      y2.classList.add("inactive");
-      z.classList.add("inactive");
-      z1.classList.add("inactive");
-
-      y.classList.remove("inactive");
-      x.classList.remove("active");
-      y2.classList.remove("active");
-      z.classList.remove("active");
-      z1.classList.remove("active");
-    }
-
-    if (id === "DistList") {
-      z.classList.add("active");
-      x.classList.add("inactive");
-      y.classList.add("inactive");
-      y2.classList.add("inactive");
-      z1.classList.add("inactive");
-
-      z.classList.remove("inactive");
-      x.classList.remove("active");
-      y.classList.remove("active");
-      y2.classList.remove("active");
-      z1.classList.remove("active");
-    }
-    if (id === "retailer") {
+    } else if (id === "retailer") {
       z1.classList.add("active");
       x.classList.add("inactive");
-      y.classList.add("inactive");
-      y2.classList.add("inactive");
-      z.classList.add("inactive");
+      y.classList.remove("inactive");
+      y1.classList.add("inactive");
 
       z1.classList.remove("inactive");
       x.classList.remove("active");
       y.classList.remove("active");
-      y2.classList.remove("active");
-      z.classList.remove("active");
+      y1.classList.remove("active");
+    } else if (id === "retailerList") {
+      y1.classList.add("active");
+      x.classList.add("inactive");
+      y.classList.remove("inactive");
+      z1.classList.add("inactive");
+
+      y1.classList.remove("inactive");
+      x.classList.remove("active");
+      y.classList.remove("active");
+      z1.classList.remove("active");
+    } else if (id === "distList") {
+      y1.classList.add("active");
+      x.classList.add("inactive");
+      y.classList.remove("inactive");
+      z1.classList.add("inactive");
+
+      y1.classList.remove("inactive");
+      x.classList.remove("active");
+      y.classList.remove("active");
+      z1.classList.remove("active");
     }
+
     myState[0].tabSelect = false;
     myState[1].tabSelect = false;
-    myState[2].tabSelect = true;
+    myState[2].tabSelect = false;
+    myState[3].tabSelect = true;
+    console.log("MyState ::", myState);
     setMenu(myState);
   };
 
@@ -655,7 +622,7 @@ export const FullLayoutComponent = ({ children }) => {
                   ))}
                 </>
               )}
-              {loginRole === "distributerunit" && (
+              {loginRole === "distributorunit" && (
                 <>
                   {menu.map((val, i) => (
                     <div

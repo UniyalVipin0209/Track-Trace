@@ -112,8 +112,6 @@ const FetchCartonDetails = () => {
         display: "flex",
         justifyContent: "center",
         textAlign: "center",
-        scrollBehavior: "smooth",
-        maxHeight: "85vh",
       }}
     >
       {itemData && (
@@ -121,8 +119,7 @@ const FetchCartonDetails = () => {
           style={{
             marginLeft: "20px",
             marginTop: "20px",
-            height: "500px",
-            overflow: "hidden",
+            overflowX: "auto",
           }}
         >
           <Timeline mode="alternate">
@@ -136,10 +133,10 @@ const FetchCartonDetails = () => {
                 {itemData.rawMaterial &&
                   itemData.rawMaterial.map((ele, idx) => (
                     <>
-                      <hr style={{ lineHeight: "4px" }} />
-                      <b>Farmer Details :</b> {ele.key} {ele.farmer_name} <br />
-                      <b>Item which is collected </b>({ele.material_name}){" "}
-                      <br />
+                      <p>
+                        <b>Farmer Details :</b> {ele.key} {ele.farmer_name}
+                        <b> Raw Material collected </b>({ele.material_name}){" "}
+                      </p>
                     </>
                   ))}
               </p>
@@ -151,19 +148,15 @@ const FetchCartonDetails = () => {
                   Product Details
                 </span>
               </p>
-              <p>
-                {itemData.productDetails &&
-                  itemData.productDetails.map((ele, idx) => (
-                    <>
-                      <hr style={{ lineHeight: "4px" }} />
-                      <b>Product Name :</b> {ele.productname} <br />
-                      <b>Raw Material used is </b>({ele.producttype}) <br />
-                      <b>Farmers ID :</b> {ele.key}
-                      <br />
-                    </>
-                  ))}
-              </p>
-              <p></p>
+
+              {itemData.productDetails &&
+                itemData.productDetails.map((ele, idx) => (
+                  <p>
+                    <b>Product Name :</b> {ele.productname} <b>Category </b>
+                    {ele.producttype}
+                    <b>Farmers ID :</b> {ele.key}
+                  </p>
+                ))}
             </Timeline.Item>
             <Timeline.Item color="green">
               Created QR Code for product.
@@ -180,7 +173,6 @@ const FetchCartonDetails = () => {
                   <>
                     <b>Destination Location :</b>{" "}
                     {itemData?.shipingToDistributorDetails.destinationLocation}{" "}
-                    <br />
                     <b>Distributor Name is </b>(
                     {
                       itemData?.shipingToDistributorDetails.distributorName.split(
@@ -190,10 +182,8 @@ const FetchCartonDetails = () => {
                     ) <br />
                     <b>Distance(Kms) :</b>{" "}
                     {itemData?.shipingToDistributorDetails.distanceInKms}
-                    <br />
                     <b>Calculated Emmission :</b>{" "}
                     {itemData?.shipingToDistributorDetails.calculateEmmision}{" "}
-                    <br />
                   </>
                 ) : (
                   <b>Data not available</b>
@@ -211,7 +201,6 @@ const FetchCartonDetails = () => {
                   <>
                     <b>Destination Location :</b>{" "}
                     {itemData?.distributorToRetailorDetails.destinationLocation}{" "}
-                    <br />
                     <b>Distributor Name is </b>(
                     {
                       itemData?.distributorToRetailorDetails.retailerName.split(

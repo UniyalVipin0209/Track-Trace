@@ -1,0 +1,33 @@
+.btnGroup{
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 3.5rem;
+    float:left;
+  }
+
+.btnSubmit{
+    background: rgb(4, 52, 132); 
+    max-width: 65%; 
+    width: 90%; 
+    height: 2.5rem; 
+    font-size: 0.7rem;
+    color: rgb(255, 255, 255);
+    border-radius: 5px; 
+    align-content:center; 
+    align-items: center;
+    transition: 0 .32s step-end;
+    
+    }
+    .btnSubmit:hover{
+        background: green;
+        font-size: 0.75rem;
+        max-width: 65%; 
+        width: 91%; 
+        height: 2.5rem; 
+        color: rgb(255, 255, 255);
+        border-radius: 5px; 
+        align-content:center; 
+        align-items: center;
+    }

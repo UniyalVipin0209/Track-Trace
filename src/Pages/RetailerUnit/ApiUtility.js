@@ -116,10 +116,35 @@ const PrerequistiesInsUpd = (parameter) => {
   console.log(" data ", data);
   return { endPoint, data, config };
 };
-
+const PrerequistiesDistributorList = () => {
+  let endPoint = "http://20.96.181.1:5000/CartonDistributorToRetailorList";
+  console.log("endpoint -", endPoint);
+  let token = process.env.REACT_APP_TOKEN;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  console.log("Params :", config);
+  return { endPoint, config };
+};
+const PrerequistiesDistributorToRetailerList = () => {
+  let endPoint = "http://20.96.181.1:5000/allCartoonList";
+  console.log("endpoint -", endPoint);
+  let token = process.env.REACT_APP_TOKEN;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  console.log("Params :", config);
+  return { endPoint, config };
+};
 export {
   PrerequistiesConfig,
   PrerequistiesInsUpd,
   PrerequistiesConfigCartonList,
+  PrerequistiesDistributorList,
   ConfigForDistributionRetailerList,
+  PrerequistiesDistributorToRetailerList,
 };

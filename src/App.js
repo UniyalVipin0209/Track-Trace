@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
+
 import "./App.scss";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import RouteWithLayout from "./Layout/RouteWithLayout";
@@ -26,7 +26,7 @@ import CreateDistributor from "./Pages/Admin/Distributor/index";
 import CreateRetailer from "./Pages/Admin/Retailer/index";
 
 import TrackDistList from "./Pages/TrackShipment/DistributorList";
-import TrackRetailList from "./Pages/TrackShipment/RetailerList";
+// import TrackRetailList from "./Pages/TrackShipment/RetailerList";
 
 import TrackRetailUnit from "./Pages/RetailerUnit/index";
 //below fetch api will change
@@ -93,12 +93,12 @@ class App extends Component {
           />
           <RouteWithLayout
             layout={FullLayoutComponent}
-            path="/DistList"
+            path="/distList"
             component={DistributorList}
           />
           <RouteWithLayout
             layout={FullLayoutComponent}
-            path="/RetailerList"
+            path="/retailerList"
             component={RetailerList}
           />
           <RouteWithLayout

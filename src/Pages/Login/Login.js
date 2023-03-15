@@ -28,7 +28,7 @@ const Login = () => {
     if (loginRole === "collectionunit" || loginRole === "processingunit")
       navigate.push("/dashboard");
     else if (loginRole === "shippingunit") navigate.push("/ProductInWH");
-    else if (loginRole === "distributerunit") navigate.push("/trackshipment");
+    else if (loginRole === "distributorunit") navigate.push("/trackshipment");
     else if (loginRole === "retailerunit") navigate.push("/TrackRetailUnit");
     else if (loginRole === "administratorunit")
       navigate.push("/CreateDistributor");
@@ -108,12 +108,12 @@ const Login = () => {
                       <option value="-1">----Please Select----</option>
                       <option value="collectionunit">Collection Unit</option>
                       <option value="processingunit">Processing Unit</option>
-                      <option value="shippingunit">Shipping Unit</option>
-                      <option value="retailerunit">Retailer Unit</option>
-                      <option value="distributerunit">Distribution Unit</option>
                       <option value="administratorunit">
                         Administrator Unit
                       </option>
+                      <option value="shippingunit">Shipping Unit</option>
+                      <option value="distributorunit">Distribution Unit</option>
+                      <option value="retailerunit">Retailer Unit</option>
                     </select>
                   </div>
                 </div>

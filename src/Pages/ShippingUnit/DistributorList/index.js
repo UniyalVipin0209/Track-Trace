@@ -1,53 +1,46 @@
-import React, { useEffect, useState, useReducer } from "react";
-import { IoMdArrowRoundBack } from "react-icons/io";
-
-import { ConfigForDistributionRetailerList } from "../ApiUtility.js";
 import axios from "axios";
-//import TableCheckBox from "./TableCheckBox";
-import DisplayDate from "../../DisplayDate";
-
 import { Table } from "antd";
-import { HiOutlineLocationMarker } from "react-icons/hi";
+import React, { useEffect, useState } from "react";
+// import { IoMdArrowRoundBack } from "react-icons/io";
 import { useHistory } from "react-router-dom";
-
+import DisplayDate from "../../DisplayDate";
+import { IoMdArrowRoundBack } from "react-icons/io";
+const ConfigForDistributionRetailerList = (inputParam) => {
+  const parameter = {
+    args: inputParam.args,
+    fcn: inputParam.fcn,
+    defaultpeers: ["peer0.org1.example.com", "peer0.org2.example.com"],
+  };
+  //let endPoint = process.env.REACT_APP_ENDPOINT_CARTONLIST;
+  let endPoint =
+    "http://20.96.181.1:5000/channels/mychannel/chaincodes/supplychain";
+  console.log("endpoint -", endPoint);
+  let token = process.env.REACT_APP_TOKEN;
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      args: parameter.args,
+      fcn: parameter.fcn,
+      peer: parameter,
+    },
+  };
+  console.log("Params :", config.params);
+  return { endPoint, config };
+};
 const DistributorList = () => {
-  const [infoMessage, setInfoMessage] = useState("Error");
-  const [distrMaster, setDistrMaster] = useState();
+  const [distrMaster, setDistrMaster] = useState([]);
+  const [infoMessage, setInfoMessage] = useState("");
   const history = useHistory();
 
-  const loginRole = localStorage.getItem("loginRole");
-
-  const columns1 = [
-    {
-      title: "Distributor",
-      dataIndex: "distributorName",
-      render: (distributorName) => (
-        <span className="productname">{distributorName}</span>
-      ),
-      hidden: false,
-    },
-    {
-      title: "License",
-      dataIndex: "license",
-      render: (_license) => <span className="productname">{_license}</span>,
-      hidden: false,
-    },
-    {
-      title: "Registered Address",
-      dataIndex: "registeredAddress",
-      render: (_registeredAddress) => (
-        <span className="productname">{_registeredAddress}</span>
-      ),
-      hidden: false,
-    },
-  ];
-
-  const columns = columns1.filter((i) => i.hidden === false);
   const fetchData = async (endPoint, config) => {
     return await axios.get(endPoint, config);
   };
+
   const handleFetchResponseDistr = async (res, setInfoMessage) => {
     const response = await res.data;
+    console.log("Distributor LIST ", res);
 
     if (typeof response === "object" && typeof response.result == "string") {
       if (response.result.includes("error")) setInfoMessage("Error");
@@ -60,17 +53,15 @@ const DistributorList = () => {
     ) {
       setInfoMessage("");
     } else {
-      setInfoMessage("");
       let customResponse = [];
 
       customResponse = response.result?.map((elem, idx) => {
         const responseObject = elem.Record;
-        // console.log("responseObject ", elem.Record);
-
+        console.log("--- ", responseObject);
         return {
           index: responseObject?.key,
-          distributorName: responseObject?.distributorName,
-          license: responseObject?.license,
+          licenseNumber: responseObject?.licenseNumber,
+          retailerName: responseObject?.distributorName,
           registeredAddress: responseObject?.registeredAddress,
         }; //
       });
@@ -78,6 +69,7 @@ const DistributorList = () => {
       setDistrMaster(customResponse);
     }
   };
+
   useEffect(() => {
     const inputParameter = {
       fcn: "getDistributor",
@@ -86,13 +78,39 @@ const DistributorList = () => {
     var { endPoint, config } =
       ConfigForDistributionRetailerList(inputParameter);
     var apiResponse = fetchData(endPoint, config);
+    console.log("test api ", apiResponse);
     apiResponse.then((res) => {
+      console.log("ApiResponse...");
       handleFetchResponseDistr(res, setInfoMessage);
     });
     console.log("distrMaster ", distrMaster);
   }, []);
-  //
-
+  const columns = [
+    {
+      key: 1,
+      title: "license Number",
+      dataIndex: "licenseNumber",
+      render: (_licenseNumber) => (
+        <span className="productname">{_licenseNumber}</span>
+      ),
+      hidden: false,
+    },
+    {
+      key: 2,
+      title: "Retailer Name",
+      dataIndex: "retailerName",
+      render: (retailerName) => (
+        <span className="productname">{retailerName}</span>
+      ),
+      hidden: false,
+    },
+    {
+      key: 3,
+      title: "Address",
+      dataIndex: "registeredAddress",
+      hidden: false,
+    },
+  ];
   return (
     <div className="full-layout-right-body mb-3">
       <div className="top-right-header">
@@ -111,32 +129,25 @@ const DistributorList = () => {
             style={{ cursor: "pointer" }}
           ></IoMdArrowRoundBack>
           {"   "}
-          <span className="main-title">Distributor's List</span>
+          <span className="main-title">Distributor</span>
         </div>
         <div className="right-date">
-          {loginRole === "administratorunit" && (
-            <div>
-              <button
-                onClick={() => {
-                  history.push("/CreateDistributor");
-                }}
-              >
-                Create Distributor
-              </button>
-            </div>
-          )}
-
           <div>
             <DisplayDate></DisplayDate>
           </div>
         </div>
       </div>
 
-      {distrMaster.length > 0 && (
+      {infoMessage !== "Error" && distrMaster.length > 0 && (
         <div className="right-body1">
           <div className="row mt-4 mb-2">
             <div className="col-md-12">
-              {/* <Table size="medium" dataSource={distrMaster} showHeader={true} /> */}
+              <Table
+                size="medium"
+                columns={columns}
+                dataSource={distrMaster}
+                showHeader={true}
+              />
             </div>
           </div>
         </div>
