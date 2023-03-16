@@ -124,9 +124,9 @@ const CreateDistributor = () => {
     console.log("-endPoint, data, config-", endPoint, data, config);
     const InsertEditAPI = async (endPoint, data, config) => {
       let modeMsg = {};
-      modeMsg = "Inserted";
+      modeMsg = "inserted";
       let modeMsgErr = "";
-      modeMsgErr = "Inserting";
+      modeMsgErr = "inserting";
       axios
         .post(endPoint, data, config)
         .then((res) => {
@@ -134,14 +134,14 @@ const CreateDistributor = () => {
           if (res.status === "200" || res.status === 200) {
             console.log("Success Response!!!");
             openNotification(
-              `Data ${modeMsg} Successfully for Product!!`,
+              `New distributor ${modeMsg}  successfully!!`,
               ``,
               "",
               "success",
               "topRight"
             );
 
-            navigate.push("/shipping");
+            navigate.push("/distList");
           }
         })
         .catch((error) => {

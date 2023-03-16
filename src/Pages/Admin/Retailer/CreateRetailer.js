@@ -82,9 +82,9 @@ const CreateRetailer = () => {
     console.log("-endPoint, data, config-", endPoint, data, config);
     const InsertEditAPI = async (endPoint, data, config) => {
       let modeMsg = {};
-      modeMsg = "Inserted";
+      modeMsg = "inserted";
       let modeMsgErr = "";
-      modeMsgErr = "Inserting";
+      modeMsgErr = "inserting";
       axios
         .post(endPoint, data, config)
         .then((res) => {
@@ -92,14 +92,14 @@ const CreateRetailer = () => {
           if (res.status === "200" || res.status === 200) {
             console.log("Success Response!!!");
             openNotification(
-              `Data ${modeMsg} Successfully for Product!!`,
+              `New retailer ${modeMsg} successfully!!`,
               ``,
               "",
               "success",
               "topRight"
             );
 
-            navigate.push("/shipping");
+            navigate.push("/RetailerList");
           }
         })
         .catch((error) => {
