@@ -63,6 +63,7 @@ const FetchCartonDetails = () => {
       let rawMaterialCollection = {};
       let distributorToRetailorDetails = {};
       let totalCarbon = response?.TotalCarbon;
+      let productImage = response?.productImg;
       productDetails = response?.productCollection;
       rawMaterialCollection = response?.productCollectionRawMaterial;
       console.log("Product details ", productDetails);
@@ -80,7 +81,7 @@ const FetchCartonDetails = () => {
       console.log("productDetailsArray ", productDetailsArray);
       console.log("rawMaterialCollection ", rawMaterialArray);
       console.log("shipingToDistributorDetails ", shipingToDistributorDetails);
-      console.log("totalCarbon ", totalCarbon);
+      console.log("productImage ", productImage);
 
       let customRespone = {
         productDetails: productDetailsArray,
@@ -88,6 +89,7 @@ const FetchCartonDetails = () => {
         shipingToDistributorDetails,
         distributorToRetailorDetails,
         totalCarbon: totalCarbon,
+        productImage:productImage,
       };
 
       setItemData(customRespone);
@@ -187,13 +189,16 @@ const FetchCartonDetails = () => {
                           <b>Category </b>
                           {ele.producttype}
                           <br /> <b>Farmers ID :</b> {ele.key}
-                          <img
-                            src={ele.productImg}
-                            alt={ele.productImg}
-                            style={{ width: "7rem" }}
-                          />
+                        
                         </p>
                       ))}
+                      {itemData.productImage && 
+                      <img
+                      src={itemData.productImage}
+                      alt={itemData.productImage}
+                      style={{ width: "7rem" }}
+                    />}
+                        
                   </Timeline.Item>
                   <Timeline.Item
                     id="shippingtodistr"
