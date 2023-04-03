@@ -73,7 +73,7 @@ const Product = () => {
             <>
               {" "}
               <div className="row">
-                <div className="col-5" style={{ width: "40%" }}>
+                <div className="col-5" style={{ width: "49%" }}>
                   <label for="txtProductTitle">Product Name:</label>
                   <input
                     type="text"
@@ -85,7 +85,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "52%",
+                      width: "45%",
                     }}
                     value={productTitle}
                     id="txtProductTitle"
@@ -99,7 +99,7 @@ const Product = () => {
                     Autocomplete="false"
                   />
                 </div>
-                <div className="col-3" style={{ width: "30%" }}>
+                <div className="col-5" style={{ width: "40%" }}>
                   <label for="txtproductUnits">Product Units:</label>
                   <input
                     type="text"
@@ -111,7 +111,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "45%",
+                      width: "38%",
                     }}
                     value={productUnits}
                     onChange={($event) => {
@@ -127,8 +127,7 @@ const Product = () => {
                     id="txtProductUnits"
                   />
                 </div>
-                <div className="col-1" style={{ width: "10%" }}></div>
-                <div className="col-2" style={{ width: "20%" }}>
+                <div className="col-2" style={{ width: "10%" }}>
                   <BsFillPlusCircleFill
                     size={32}
                     style={{
@@ -154,7 +153,7 @@ const Product = () => {
           ) : (
             <>
               {" "}
-              <div className="col-5" style={{ width: "40%" }}>
+              <div className="col-5" style={{ width: "50%" }}>
                 <label for="txtProductTitle">Enter Product Name:</label>
                 <input
                   type="text"
@@ -166,7 +165,7 @@ const Product = () => {
                     borderRadius: "5px",
                     padding: "5px",
                     fontSize: "0.58rem",
-                    width: "52%",
+                    width: "45%",
                   }}
                   value={productTitle}
                   readOnly
@@ -174,7 +173,7 @@ const Product = () => {
                   name="txtProductTitle"
                 />
               </div>
-              <div className="col-3" style={{ width: "30%" }}>
+              <div className="col-5" style={{ width: "40%" }}>
                 <label for="txtproductUnits">Enter Product Name:</label>
                 <input
                   type="text"

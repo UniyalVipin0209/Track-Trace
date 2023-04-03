@@ -117,7 +117,7 @@ export const FullLayoutComponent = ({ children }) => {
       //Carton Packed Products
       title: "Product (CPP)",
       icon: <MdBackpack style={{ fontSize: "1rem" }}></MdBackpack>,
-      classN: "active",
+      classN: "inactive",
       id: "prod", // prodinwh old prod
       tabSelect: false,
       path: "CartonPackedProd",
@@ -273,18 +273,6 @@ export const FullLayoutComponent = ({ children }) => {
 
     let myState = menu;
 
-    if (id === "qrCode") {
-      y2.classList.add("active");
-      x.classList.add("inactive");
-      x1.classList.add("inactive");
-      y.classList.add("inactive");
-
-      y2.classList.remove("inactive");
-      x.classList.remove("active");
-      x1.classList.add("active");
-      y.classList.remove("active");
-    }
-
     if (id === "Dash") {
       x.classList.add("active");
       y2.classList.add("inactive");
@@ -297,6 +285,18 @@ export const FullLayoutComponent = ({ children }) => {
       x1.classList.add("active");
     }
 
+    if (id === "qrCode") {
+      y2.classList.add("active");
+      x.classList.add("inactive");
+      x1.classList.add("inactive");
+      y.classList.add("inactive");
+
+      y2.classList.remove("inactive");
+      x.classList.remove("active");
+      x1.classList.remove("active");
+      y.classList.remove("active");
+    }
+
     if (id === "ProdCh") {
       y.classList.add("active");
       x.classList.add("inactive");
@@ -306,7 +306,7 @@ export const FullLayoutComponent = ({ children }) => {
       y.classList.remove("inactive");
       x.classList.remove("active");
       y2.classList.remove("active");
-      x1.classList.add("active");
+      x1.classList.remove("active");
     }
     if (id === "ProdFruit") {
       x1.classList.add("active");
@@ -314,10 +314,10 @@ export const FullLayoutComponent = ({ children }) => {
       y.classList.add("inactive");
       y2.classList.add("inactive");
 
-      y.classList.remove("inactive");
+      x1.classList.remove("inactive");
+      y.classList.remove("active");
       x.classList.remove("active");
       y2.classList.remove("active");
-      x1.classList.add("active");
     }
 
     myState[0].tabSelect = false;
@@ -348,21 +348,19 @@ export const FullLayoutComponent = ({ children }) => {
     let z1 = document.getElementById("prodinwh");
 
     let myState = menu;
-
-    if (id === "trackshipment") {
-      y2.classList.add("active");
+    if (id === "prodinwh") {
+      z1.classList.add("active");
       x.classList.add("inactive");
       y.classList.add("inactive");
+      y2.classList.add("inactive");
       z.classList.add("inactive");
-      z1.classList.add("inactive");
 
-      y2.classList.remove("inactive");
+      z1.classList.remove("inactive");
       x.classList.remove("active");
       y.classList.remove("active");
+      y2.classList.remove("active");
       z.classList.remove("active");
-      z1.classList.remove("active");
     }
-
     if (id === "prod") {
       x.classList.add("active");
       y2.classList.add("inactive");
@@ -376,7 +374,6 @@ export const FullLayoutComponent = ({ children }) => {
       z.classList.remove("active");
       z1.classList.remove("active");
     }
-
     if (id === "shipping") {
       y.classList.add("active");
       x.classList.add("inactive");
@@ -387,6 +384,19 @@ export const FullLayoutComponent = ({ children }) => {
       y.classList.remove("inactive");
       x.classList.remove("active");
       y2.classList.remove("active");
+      z.classList.remove("active");
+      z1.classList.remove("active");
+    }
+    if (id === "trackshipment") {
+      y2.classList.add("active");
+      x.classList.add("inactive");
+      y.classList.add("inactive");
+      z.classList.add("inactive");
+      z1.classList.add("inactive");
+
+      y2.classList.remove("inactive");
+      x.classList.remove("active");
+      y.classList.remove("active");
       z.classList.remove("active");
       z1.classList.remove("active");
     }
@@ -404,19 +414,7 @@ export const FullLayoutComponent = ({ children }) => {
       y2.classList.remove("active");
       z1.classList.remove("active");
     }
-    if (id === "prodinwh") {
-      z1.classList.add("active");
-      x.classList.add("inactive");
-      y.classList.add("inactive");
-      y2.classList.add("inactive");
-      z.classList.add("inactive");
 
-      z1.classList.remove("inactive");
-      x.classList.remove("active");
-      y.classList.remove("active");
-      y2.classList.remove("active");
-      z.classList.remove("active");
-    }
     myState[0].tabSelect = false;
     myState[1].tabSelect = false;
     myState[2].tabSelect = true;

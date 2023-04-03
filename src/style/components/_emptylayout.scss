@@ -73,7 +73,7 @@
                     }
                     .settings{
                         background-color: #fff;
-                        position: absolute;
+                        // position: absolute;
                         right:1rem;
                         width: 2rem;
                         height: 2rem;
@@ -133,10 +133,11 @@
                 //     position: relative;
                 // }
                 .bottom-tabs{
-                    position: absolute;
+                    // position: absolute;
                     bottom: 1rem;
-                    width: 80%;
+                    width: 60%;
                     margin-left: 7%;
+                    top:2.5rem;
                     div{
                         background-color: #8f959d;
                         height: 1.8rem;
@@ -546,3 +547,4 @@
         }
     }
 }
+
