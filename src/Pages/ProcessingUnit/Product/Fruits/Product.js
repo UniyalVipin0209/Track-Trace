@@ -85,7 +85,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "45%",
+                      width: "40%",
                     }}
                     value={productTitle}
                     id="txtProductTitle"
@@ -100,7 +100,7 @@ const Product = () => {
                   />
                 </div>
                 <div className="col-5" style={{ width: "40%" }}>
-                  <label for="txtproductUnits">Product Units:</label>
+                  <label for="txtproductUnits">Units:</label>
                   <input
                     type="text"
                     className="product-text"
@@ -153,8 +153,8 @@ const Product = () => {
           ) : (
             <>
               {" "}
-              <div className="col-5" style={{ width: "50%" }}>
-                <label for="txtProductTitle">Enter Product Name:</label>
+              <div className="col-5" style={{ width: "49%" }}>
+                <label for="txtProductTitle">Product Name:</label>
                 <input
                   type="text"
                   className="product-text"
@@ -165,7 +165,7 @@ const Product = () => {
                     borderRadius: "5px",
                     padding: "5px",
                     fontSize: "0.58rem",
-                    width: "45%",
+                    width: "40%",
                   }}
                   value={productTitle}
                   readOnly
@@ -174,7 +174,7 @@ const Product = () => {
                 />
               </div>
               <div className="col-5" style={{ width: "40%" }}>
-                <label for="txtproductUnits">Enter Product Name:</label>
+                <label for="txtproductUnits">Units:</label>
                 <input
                   type="text"
                   inputmode="numeric"
@@ -187,7 +187,7 @@ const Product = () => {
                     borderRadius: "5px",
                     padding: "5px",
                     fontSize: "0.58rem",
-                    width: "45%",
+                    width: "38%",
                   }}
                   value={productUnits}
                   id="txtProductUnits"

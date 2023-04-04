@@ -85,31 +85,8 @@ const Product = () => {
             <>
               {" "}
               <div className="row">
-                <div className="col-5" style={{ width: "50%" }}>
+                <div className="col-5" style={{ width: "49%" }}>
                   <label for="txtProductTitle">Product Name:</label>
-                  {/* <input
-                    type="text"
-                    className="product-text"
-                    placeholder="Enter Product Name"
-                    style={{
-                      border: "1px solid #d9d9d9",
-                      marginLeft: "8px",
-                      borderRadius: "5px",
-                      padding: "5px",
-                      fontSize: "0.58rem",
-                      width: "52%",
-                    }}
-                    value={productTitle}
-                    id="txtProductTitle"
-                    name="txtProductTitle"
-                    autoCapitalize="true"
-                    onChange={($event) => {
-                      if ($event.target.value !== "") {
-                        setProductTitle($event.target.value);
-                      }
-                    }}
-                    Autocomplete="false"
-                  /> */}
                   <Select
                     placeholder="Enter Product Name"
                     style={{
@@ -117,7 +94,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "46%",
+                      width: "44%",
                     }}
                     onChange={onChangeProductTitle}
                     id="txtProductTitle"
@@ -188,8 +165,8 @@ const Product = () => {
           ) : (
             <>
               {" "}
-              <div className="col-5" style={{ width: "50%" }}>
-                <label for="txtProductTitle">Enter Product Name:</label>
+              <div className="col-5" style={{ width: "49%" }}>
+                <label for="txtProductTitle">Product Name:</label>
                 <input
                   type="text"
                   className="product-text"
@@ -209,7 +186,7 @@ const Product = () => {
                 />
               </div>
               <div className="col-5" style={{ width: "40%" }}>
-                <label for="txtproductUnits">Enter Product Name:</label>
+                <label for="txtproductUnits">Units:</label>
                 <input
                   type="text"
                   inputmode="numeric"
