@@ -203,7 +203,7 @@ const CartonList = () => {
                   navigate.push("/retailerList");
                 }}
               >
-                Go to Shipping
+                Go to Retailers
               </button>
             </div>
 

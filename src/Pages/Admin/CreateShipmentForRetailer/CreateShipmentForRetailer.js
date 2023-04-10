@@ -133,7 +133,7 @@ const CreateShipmentForRetailer = () => {
   const navigate = useHistory();
   const { isLoaded } = useJsApiLoader({
     //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    googleMapsApiKey: "AIzaSyAMHmvxTgc0IucoQkMM-NTjnrtJYDDOX3Y",
+    googleMapsApiKey: "AIzaSyCSeQco969DozyRe2mw_ua_74P98Mo43tM",
     libraries: ["places"],
   });
   const fetchData = async (endPoint, config) => {
@@ -942,7 +942,12 @@ const CreateShipmentForRetailer = () => {
             }}
           >
             <Button
-              style={{ background: "#043484", color: "white" }}
+              style={{
+                background: "#043484",
+                width: "38%",
+                lineHeight: "1.62rem",
+                color: "white",
+              }}
               htmlType="submit"
             >
               Submit

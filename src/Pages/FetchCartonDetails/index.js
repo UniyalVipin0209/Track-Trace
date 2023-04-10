@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Timeline } from "antd";
+
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+// import "react-vertical-timeline-component/style.min.css";
+import "react-vertical-timeline-component/style.min.css";
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,11 +13,15 @@ import {
   useParams,
 } from "react-router-dom";
 import axios from "axios";
-import { SmileOutlined } from "@ant-design/icons";
+import { GiFarmer } from "react-icons/gi";
+import { GoPerson, GoLocation } from "react-icons/go";
+//FaShippingFast
 
-import "antd/dist/antd.css";
-import ShippingToDistributer from "./../ShippingUnit/ShippingToDistributer/index";
-import Apples from "./../RawMaterials/Apples/Apples";
+import { TbBrandCarbon } from "react-icons/tb";
+import { FaShippingFast } from "react-icons/fa";
+import { MdLocalShipping } from "react-icons/md";
+import { BiCategory } from "react-icons/bi";
+import "./style.css";
 import moment from "moment";
 const PrerequistiesConfigCartonList = (_cartoonid) => {
   const parameter = {
@@ -63,6 +73,7 @@ const FetchCartonDetails = () => {
       let rawMaterialCollection = {};
       let distributorToRetailorDetails = {};
       let totalCarbon = response?.TotalCarbon;
+      let productImage = response?.productImg;
       productDetails = response?.productCollection;
       rawMaterialCollection = response?.productCollectionRawMaterial;
       console.log("Product details ", productDetails);
@@ -77,10 +88,10 @@ const FetchCartonDetails = () => {
         (ele) => ele[1]
       );
 
-      console.log("productDetailsArray ", productDetailsArray);
-      console.log("rawMaterialCollection ", rawMaterialArray);
-      console.log("shipingToDistributorDetails ", shipingToDistributorDetails);
-      console.log("totalCarbon ", totalCarbon);
+      // console.log("productDetailsArray ", productDetailsArray);
+      // console.log("rawMaterialCollection ", rawMaterialArray);
+      // console.log("shipingToDistributorDetails ", shipingToDistributorDetails);
+      // console.log("productImage ", productImage);
 
       let customRespone = {
         productDetails: productDetailsArray,
@@ -88,6 +99,7 @@ const FetchCartonDetails = () => {
         shipingToDistributorDetails,
         distributorToRetailorDetails,
         totalCarbon: totalCarbon,
+        productImage: productImage,
       };
 
       setItemData(customRespone);
@@ -110,204 +122,244 @@ const FetchCartonDetails = () => {
         <div className="_40_percent pagetitle">
           <span className="pagetitle">History</span>
         </div>
-        <div
-          className="_60_percent right-date"
-          style={{ display: "inline-flex", gap: "1.45rem" }}
-        >
+        <div className="_60_percent right-date top-menu">
           <a href="#rawmaterials">Raw Materials</a>
           <a href="#productdetails">Product</a>
           <a href="#shippingtodistr">Shipment - Distribution</a>
           <a href="#distrtoRetailer">Shipment - Retailer</a>
-          <a href="#finalcarbon">totalcarbon</a>
+          <a href="#finalcarbon">Total Estimated Carbon</a>
           <span>{moment().format("MMM DD, YYYY")}</span>
         </div>
       </div>
       <div
         className="right-body1"
         style={{
-          width: "60vw",
+          width: "80vw",
           scrollBehavior: "smooth",
           overflowY: "hidden",
-          maxHeight: "47vw",
+          maxHeight: "48vw",
           scrollSnapType: "y",
         }}
       >
-        <div className="row mt-2 mb-2"></div>
-        <div className="row mt-4 mb-2">
-          <div className="col-md-12">
+        <div className="row mt-4 mb-4">
+          <div className="col-md-10 m-auto overflow-scroll">
             {itemData && (
-              <div
-                style={{
-                  marginLeft: "20px",
-                  marginTop: "50px",
-                }}
-              >
-                <Timeline mode="alternate">
-                  <Timeline.Item
-                    id="rawmaterials"
-                    style={{ scrollSnapAlign: "start", maxHeight: "45vw" }}
-                    color="Yellow"
-                  >
-                    <p>
-                      <span style={{ fontSize: "1.48rem", color: "brown" }}>
-                        Commodities Details
-                      </span>
-                    </p>
-                    <p>
-                      {itemData.rawMaterial &&
-                        itemData.rawMaterial.map((ele, idx) => (
-                          <>
-                            <p>
-                              <b>Farmer Details :</b> {ele.key}{" "}
-                              {ele.farmer_name}
-                              <br />
-                              <b> Raw Material collected </b>
-                              {ele.material_name}{" "}
-                            </p>
-                          </>
-                        ))}
-                    </p>
-                    <p></p>
-                  </Timeline.Item>
-                  <Timeline.Item
-                    id="productdetails"
-                    style={{ scrollSnapAlign: "start" }}
-                    color="green"
-                  >
-                    <p>
-                      <span style={{ fontSize: "1.48rem", color: "Green" }}>
-                        Product Details
-                      </span>
-                    </p>
-
-                    {itemData.productDetails &&
-                      itemData.productDetails.map((ele, idx) => (
+              <VerticalTimeline>
+                <VerticalTimelineElement
+                  className="vertical-timeline-element--work"
+                  contentStyle={{
+                    background: "rgb(33, 150, 243)",
+                    color: "#fff",
+                  }}
+                  contentArrowStyle={{
+                    borderRight: "18px solid rgb(33, 150, 243)",
+                  }}
+                  iconStyle={{
+                    background: "rgb(33, 150, 243)",
+                    color: "#fff",
+                  }}
+                  icon={<BiCategory />}
+                  id="rawmaterials"
+                >
+                  <h3 className="vertical-timeline-element-title">Commodity</h3>
+                  <h4 className="vertical-timeline-element-subtitle">
+                    <p>Farmer and Commodity Details</p>
+                    {itemData.rawMaterial &&
+                      itemData.rawMaterial.map((ele, idx) => (
                         <p>
-                          <b>Product Name :</b> {ele.productname} for{" "}
-                          <b>Category </b>
-                          {ele.producttype}
-                          <br /> <b>Farmers ID :</b> {ele.key}
-                          <img
-                            src={ele.productImg}
-                            alt={ele.productImg}
-                            style={{ width: "7rem" }}
-                          />
+                          {idx + 1}. {ele.key}, {ele.farmer_name}{" "}
+                          <b>Item collected from </b>({ele.material_name}){" "}
                         </p>
                       ))}
-                  </Timeline.Item>
-                  <Timeline.Item
-                    id="shippingtodistr"
-                    style={{ scrollSnapAlign: "center" }}
-                    color="red"
-                  >
-                    <p>
-                      <span style={{ fontSize: "1.48rem", color: "Red" }}>
-                        Shipping to Distributor Details
-                      </span>
-                    </p>
+                  </h4>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                  className="vertical-timeline-element--work"
+                  contentArrowStyle={{
+                    borderRight: "18px solid rgb(142, 127, 67)",
+                  }}
+                  contentStyle={{
+                    background: "rgb(142, 127, 67)",
+                    color: "#fff",
+                  }}
+                  iconStyle={{
+                    background: "rgb(142, 127, 67)",
+                    color: "#fff",
+                  }}
+                  icon={<GiFarmer />}
+                  id="productdetails"
+                >
+                  {/* <h4 className="vertical-timeline-element-subtitle"></h4> */}
+                  <div className="flex-container">
+                    <div className="divcontent">
+                      <h3 className="vertical-timeline-element-title">
+                        Product Details
+                      </h3>
 
-                    <p>
-                      {itemData?.shipingToDistributorDetails ? (
-                        <>
-                          <b>Origin :</b>{" "}
-                          {itemData?.shipingToDistributorDetails.originLocation}{" "}
-                          <br />
-                          <b>Destination Location :</b>{" "}
-                          {
-                            itemData?.shipingToDistributorDetails
-                              .destinationLocation
-                          }{" "}
-                          <br />
-                          <b>Distributor Name is </b>
-                          {
-                            itemData?.shipingToDistributorDetails.distributorName.split(
-                              "~"
-                            )[1]
-                          }
-                          <br />
-                          <b>Transported by </b>{" "}
-                          {itemData?.shipingToDistributorDetails.travelMode}
-                          <br />
-                          <b>Distance(Kms) :</b>{" "}
-                          {itemData?.shipingToDistributorDetails.distanceInKms}
-                          <br />
-                          <b>Calculated Emmission :</b>{" "}
-                          {
-                            itemData?.shipingToDistributorDetails
-                              .calculateEmmision
-                          }{" "}
-                        </>
-                      ) : (
-                        <b>Data not available</b>
+                      {itemData.productDetails &&
+                        itemData.productDetails.map((ele, idx) => (
+                          <p>
+                            {idx + 1}. {ele.productname} from category{" "}
+                            {ele.producttype}
+                          </p>
+                        ))}
+                    </div>
+                    <div className="divimage">
+                      {itemData.productImage && (
+                        <img
+                          src={itemData.productImage}
+                          alt={itemData.productImage}
+                          style={{ width: "6rem" }}
+                        />
                       )}
-                    </p>
-                  </Timeline.Item>
-                  <Timeline.Item
-                    id="distrtoRetailer"
-                    style={{ scrollSnapAlign: "center" }}
-                    color="orange"
-                  >
-                    <p>
-                      <span style={{ fontSize: "1.48rem", color: "Orange" }}>
-                        Shipping Distributor to Retailer Details
-                      </span>
-                    </p>
-                    <p>
-                      {itemData?.distributorToRetailorDetails ? (
-                        <>
-                          <b>Destination Location :</b>{" "}
-                          {
-                            itemData?.distributorToRetailorDetails
-                              .destinationLocation
-                          }{" "}
-                          <br />
-                          <b>Distributor Name is </b>(
-                          {
-                            itemData?.distributorToRetailorDetails.retailerName.split(
-                              "~"
-                            )[1]
-                          }
-                          ) <br />
-                          <b>Transported by </b>
-                          {itemData?.distributorToRetailorDetails.travelMode}
-                          <br />
-                          <b>Distance(Kms) :</b>{" "}
-                          {itemData?.distributorToRetailorDetails.distanceInKms}
-                          <br />
-                          <b>Calculated Emmission :</b>{" "}
-                          {
-                            itemData?.distributorToRetailorDetails
-                              .calculateEmmision
-                          }{" "}
-                          <br />
-                        </>
-                      ) : (
-                        <b>Data not available</b>
-                      )}
-                    </p>
-                  </Timeline.Item>
-
-                  <Timeline.Item
-                    id="finalcarbon"
-                    style={{ scrollSnapAlign: "end" }}
-                    color="red"
-                  >
-                    <p>
-                      <span style={{ fontSize: "1.48rem", color: "Orange" }}>
-                        Carbon Footprint
-                      </span>
-                    </p>
-                    {itemData?.totalCarbon && (
+                    </div>
+                  </div>
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                  className="vertical-timeline-element--work"
+                  contentArrowStyle={{
+                    borderRight: "18px solid rgb(67, 142, 142)",
+                  }}
+                  contentStyle={{
+                    background: "rgb(67, 142, 142)",
+                    color: "#fff",
+                  }}
+                  iconStyle={{
+                    background: "rgb(67, 142, 142)",
+                    color: "#fff",
+                  }}
+                  id="shippingtodistr"
+                  icon={<FaShippingFast />}
+                >
+                  <h3 className="vertical-timeline-element-title">
+                    Shipping to Distributor
+                  </h3>
+                  {/* <h4 className="vertical-timeline-element-subtitle"></h4> */}
+                  {itemData?.shipingToDistributorDetails ? (
+                    <>
                       <p>
-                        Total Estimated Carbon Footprint is{" "}
-                        {itemData?.totalCarbon}
-                        <br />
-                        <br />
+                        Origin <GoLocation color="white" size={19} />:
+                        {itemData?.shipingToDistributorDetails.originLocation}{" "}
                       </p>
-                    )}
-                  </Timeline.Item>
-                </Timeline>
-              </div>
+                      <p>
+                        Destination <GoLocation color="white" size={19} /> :{" "}
+                        {
+                          itemData?.shipingToDistributorDetails
+                            .destinationLocation
+                        }{" "}
+                      </p>
+                      <p>
+                        Distributor Name :
+                        {
+                          itemData?.shipingToDistributorDetails.distributorName.split(
+                            "~"
+                          )[1]
+                        }
+                      </p>
+                      <p>
+                        Transported by{" "}
+                        {itemData?.shipingToDistributorDetails.travelMode}
+                      </p>
+                      <p>
+                        Distance(Kms) :{" "}
+                        {itemData?.shipingToDistributorDetails.distanceInKms}
+                      </p>
+                      <p>
+                        Calculated Emmission :{" "}
+                        {
+                          itemData?.shipingToDistributorDetails
+                            .calculateEmmision
+                        }{" "}
+                      </p>
+                    </>
+                  ) : (
+                    <b>Data not available</b>
+                  )}
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                  className="vertical-timeline-element--work"
+                  id="distrtoRetailer"
+                  contentArrowStyle={{
+                    borderRight: "18px solid rgb(108, 88, 138)",
+                  }}
+                  contentStyle={{
+                    background: "rgb(108, 88, 138)",
+                    color: "#fff",
+                  }}
+                  iconStyle={{
+                    background: "rgb(108, 88, 138)",
+                    color: "#fff",
+                  }}
+                  icon={<MdLocalShipping />}
+                >
+                  <h3 className="vertical-timeline-element-title">
+                    Distributor to Retailer Details
+                  </h3>
+                  {itemData?.distributorToRetailorDetails ? (
+                    <>
+                      <p>
+                        Destination <GoLocation color="white" size={19} />:
+                        {
+                          itemData?.distributorToRetailorDetails
+                            .destinationLocation
+                        }{" "}
+                      </p>
+
+                      <p>
+                        Retailer Name :(
+                        {
+                          itemData?.distributorToRetailorDetails.retailerName.split(
+                            "~"
+                          )[1]
+                        }
+                        ){" "}
+                      </p>
+                      <p>
+                        Transported by :
+                        {itemData?.distributorToRetailorDetails.travelMode}
+                      </p>
+                      <p>
+                        Distance(Kms) :
+                        {itemData?.distributorToRetailorDetails.distanceInKms}
+                      </p>
+                      <p>
+                        Calculated Emmission :
+                        {
+                          itemData?.distributorToRetailorDetails
+                            .calculateEmmision
+                        }{" "}
+                      </p>
+                    </>
+                  ) : (
+                    <p>No data.</p>
+                  )}
+                </VerticalTimelineElement>
+                <VerticalTimelineElement
+                  id="finalcarbon"
+                  className="vertical-timeline-element--education"
+                  contentArrowStyle={{
+                    borderRight: "18px solid rgb(233, 30, 99)",
+                  }}
+                  contentStyle={{
+                    background: "rgb(233, 30, 99)",
+                    color: "#fff",
+                  }}
+                  iconStyle={{
+                    background: "rgb(233, 30, 99)",
+                    color: "#fff",
+                  }}
+                  icon={<TbBrandCarbon />}
+                >
+                  <h3 className="vertical-timeline-element-title">
+                    Total Estimated Emission
+                  </h3>
+
+                  <p style={{ textAlign: "center" }}>
+                    {" "}
+                    {itemData?.totalCarbon}
+                  </p>
+                </VerticalTimelineElement>
+              </VerticalTimeline>
             )}
           </div>
         </div>

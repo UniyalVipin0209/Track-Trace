@@ -132,8 +132,9 @@ const CreateShipmentForDistributor = () => {
 
   const navigate = useHistory();
   const { isLoaded } = useJsApiLoader({
-    //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    googleMapsApiKey: "AIzaSyAMHmvxTgc0IucoQkMM-NTjnrtJYDDOX3Y",
+    // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+
+    googleMapsApiKey: "AIzaSyCSeQco969DozyRe2mw_ua_74P98Mo43tM",
     libraries: ["places"],
   });
   const fetchData = async (endPoint, config) => {
@@ -152,12 +153,10 @@ const CreateShipmentForDistributor = () => {
     ) {
       setInfoMessage("");
     } else {
-      console.log("Map--");
       let customResponse = [];
 
       customResponse = response.result?.map((elem, idx) => {
         let responseObject = elem.Record?.cartonDetails;
-        console.log("responseObject ", responseObject);
         return {
           index: elem.Key,
           totalUnits: elem.Record?.totalUnits,
@@ -946,8 +945,13 @@ const CreateShipmentForDistributor = () => {
             }}
           >
             <Button
-              style={{ background: "#043484", color: "white" }}
-              htmlType="submit"
+              style={{
+                background: "#043484",
+                width: "38%",
+                lineHeight: "1.62rem",
+                color: "white",
+              }}
+              htmlType="Submit"
             >
               Submit
             </Button>

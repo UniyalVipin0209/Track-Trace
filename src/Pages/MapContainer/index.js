@@ -38,8 +38,8 @@ const MapContainer = ({ record }) => {
 
   const [libraries] = useState(["places"]);
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_MAPKEY,
-    //googleMapsApiKey: "AIzaSyAMHmvxTgc0IucoQkMM-NTjnrtJYDDOX3Y",
+    // googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: "AIzaSyCSeQco969DozyRe2mw_ua_74P98Mo43tM",
     libraries,
   });
 
@@ -62,7 +62,7 @@ const MapContainer = ({ record }) => {
         // eslint-disable-next-line no-undef
         travelMode: google.maps.TravelMode.DRIVING,
       });
-      console.log("Results ", results);
+      // console.log("Results ", results);
       setDirectionsResponse(results);
       let customZoom = calculateZoomLevel(precord.distanceInKms);
       setZoomVal(customZoom);
@@ -107,7 +107,7 @@ const MapContainer = ({ record }) => {
         position="relative"
         flexDirection="column"
         alignItems="center"
-        h="74.5vh"
+        h="80vh"
         w="73.8vw"
       >
         <Box position="absolute" left={0} top={0} h="97%" w="96.5%">
@@ -128,11 +128,19 @@ const MapContainer = ({ record }) => {
               <DirectionsRenderer directions={directionsResponse} />
             )}
           </GoogleMap>
-          <HStack mt={5} spacing={5} justifyContent="space-between">
-            <Text ml={4}>Distance: {distance} </Text>
-            <Text>Duration: {duration} </Text>
-            <Text style={{ color: "Green" }}>
-              Estimated Emmision(Co2): {estimatedEmmision}{" "}
+          <HStack
+            mt={5}
+            spacing={3}
+            alignContent="center"
+            justifyContent="center"
+            display="flex"
+          >
+            <Text>Distance: {distance}</Text>
+            <Text ml={1} mr={1}>
+              Duration: {duration}
+            </Text>
+            <Text ml={1} style={{ color: "Green" }}>
+              Estimated Emmision(Co2): {estimatedEmmision}
             </Text>
           </HStack>
         </Box>

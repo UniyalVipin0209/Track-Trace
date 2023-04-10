@@ -451,12 +451,9 @@ const Template = ({ productTitle, productUnits, productImage }) => {
                       title="Click here to add"
                       className="updt-otps-edit"
                       style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
                         cursor: "pointer",
+                        marginLeft: ".7rem",
+                        fontSize: "0.68rem",
                       }}
                     ></RiSaveFill>{" "}
                   </td>
@@ -562,12 +559,9 @@ const Template = ({ productTitle, productUnits, productImage }) => {
                       }}
                       className="updt-otps-edit"
                       style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
                         cursor: "pointer",
+                        marginLeft: ".7rem",
+                        fontSize: "0.68rem",
                       }}
                     ></RiSaveFill>{" "}
                   </td>
@@ -667,12 +661,9 @@ const Template = ({ productTitle, productUnits, productImage }) => {
                       title="Click here to add"
                       className="updt-otps-edit"
                       style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
                         cursor: "pointer",
+                        marginLeft: ".7rem",
+                        fontSize: "0.68rem",
                       }}
                     ></RiSaveFill>{" "}
                   </td>

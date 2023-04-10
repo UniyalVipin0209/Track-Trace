@@ -85,31 +85,9 @@ const Product = () => {
             <>
               {" "}
               <div className="row">
-                <div className="col-5" style={{ width: "40%" }}>
+                <div className="col-5" style={{ width: "50%" }}>
                   <label for="txtProductTitle">Product Name:</label>
-                  {/* <input
-                    type="text"
-                    className="product-text"
-                    placeholder="Enter Product Name"
-                    style={{
-                      border: "1px solid #d9d9d9",
-                      marginLeft: "8px",
-                      borderRadius: "5px",
-                      padding: "5px",
-                      fontSize: "0.58rem",
-                      width: "52%",
-                    }}
-                    value={productTitle}
-                    id="txtProductTitle"
-                    name="txtProductTitle"
-                    autoCapitalize="true"
-                    onChange={($event) => {
-                      if ($event.target.value !== "") {
-                        setProductTitle($event.target.value);
-                      }
-                    }}
-                    Autocomplete="false"
-                  /> */}
+
                   <Select
                     placeholder="Enter Product Name"
                     style={{
@@ -117,7 +95,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "52%",
+                      width: "46%",
                     }}
                     onChange={onChangeProductTitle}
                     id="txtProductTitle"
@@ -134,7 +112,7 @@ const Product = () => {
                     <Select.Option value="Oreo">Oreo</Select.Option>
                   </Select>
                 </div>
-                <div className="col-3" style={{ width: "30%" }}>
+                <div className="col-5" style={{ width: "40%" }}>
                   <label for="txtproductUnits">Product Units:</label>
                   <input
                     type="text"
@@ -146,7 +124,7 @@ const Product = () => {
                       borderRadius: "5px",
                       padding: "5px",
                       fontSize: "0.58rem",
-                      width: "45%",
+                      width: "38%",
                     }}
                     value={productUnits}
                     onChange={($event) => {
@@ -162,8 +140,7 @@ const Product = () => {
                     id="txtProductUnits"
                   />
                 </div>
-                <div className="col-1" style={{ width: "10%" }}></div>
-                <div className="col-2" style={{ width: "20%" }}>
+                <div className="col-2" style={{ width: "10%" }}>
                   <BsFillPlusCircleFill
                     size={32}
                     style={{
@@ -189,7 +166,7 @@ const Product = () => {
           ) : (
             <>
               {" "}
-              <div className="col-5" style={{ width: "40%" }}>
+              <div className="col-5" style={{ width: "50%" }}>
                 <label for="txtProductTitle">Enter Product Name:</label>
                 <input
                   type="text"
@@ -201,7 +178,7 @@ const Product = () => {
                     borderRadius: "5px",
                     padding: "5px",
                     fontSize: "0.58rem",
-                    width: "52%",
+                    width: "45%",
                   }}
                   value={productTitle}
                   readOnly
@@ -209,7 +186,7 @@ const Product = () => {
                   name="txtProductTitle"
                 />
               </div>
-              <div className="col-3" style={{ width: "30%" }}>
+              <div className="col-5" style={{ width: "40%" }}>
                 <label for="txtproductUnits">Enter Product Name:</label>
                 <input
                   type="text"
@@ -223,7 +200,7 @@ const Product = () => {
                     borderRadius: "5px",
                     padding: "5px",
                     fontSize: "0.58rem",
-                    width: "45%",
+                    width: "38%",
                   }}
                   value={productUnits}
                   id="txtProductUnits"

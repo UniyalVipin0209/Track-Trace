@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { RiDeleteBinLine, RiSaveFill } from "react-icons/ri";
-import { Collapse, Select } from "antd";
+import { Collapse, Select, Spin } from "antd";
 import { PrerequistiesConfigAll } from "./TemplateUtility.js";
 import axios from "axios";
 import { MdOutlineSwapHorizontalCircle } from "react-icons/md";
@@ -12,10 +12,8 @@ import {
   customDetailsObj,
 } from "./DefaultSchema.js";
 import openNotification from "../notification";
-//import { ApplesCat, MangoesCat, HoneyCat } from "./DefaultValues.js";
-//API
 
-import { notification } from "antd";
+import { notification, Alert } from "antd";
 import {
   PrerequistiesInsUpd,
   PrerequistiesConfigure,
@@ -27,6 +25,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const Template = ({ productTitle, productUnits, productImage }) => {
+  const [load, setLoad] = useState(false);
   const [dataApples, setDataApples] = useState([]);
   const [dataHoney, setDataHoney] = useState([]);
   const [dataMangoes, setDataMangoes] = useState([]);
@@ -80,31 +79,40 @@ const Template = ({ productTitle, productUnits, productImage }) => {
     const response = await res.data;
     console.log("Response ::", response);
     console.log(response.status);
-    if (typeof response === "object" && typeof response.result == "string") {
-      // issue in backend(configuration side)
-      if (response.result.includes("error")) setInfoMessage("Error");
-    } else if (
-      typeof response === "object" &&
-      response.error != null &&
-      response.errorData != null &&
-      response.result.length === 0 &&
-      typeof response.result == "string"
-    ) {
-      setInfoMessage("");
-    } else {
-      console.log("Map 123--");
-      //response.result?.map((elem) => console.log(elem.Key, elem.Record));
-      const result1 = response.result;
-      console.log("Map 123--", result1);
-      let ApplesCat = [];
-      let HoneyCat = [];
-      let MangoesCat = [];
-      ApplesCat = result1.filter((e) => e.productType === "Apples");
-      setDataApples(ApplesCat);
-      HoneyCat = result1.filter((e) => e.productType === "Honey");
-      setDataHoney(HoneyCat);
-      MangoesCat = result1.filter((e) => e.productType === "Mangoes");
-      setDataMangoes(MangoesCat);
+    setLoad(true);
+
+    try {
+      if (typeof response === "object" && typeof response.result == "string") {
+        // issue in backend(configuration side)
+        if (response.result.includes("error")) setInfoMessage("Error");
+      } else if (
+        typeof response === "object" &&
+        response.error != null &&
+        response.errorData != null &&
+        response.result.length === 0 &&
+        typeof response.result == "string"
+      ) {
+        setInfoMessage("");
+      } else {
+        console.log("Map 123--");
+        //response.result?.map((elem) => console.log(elem.Key, elem.Record));
+        const result1 = response.result;
+        console.log("Map 123--", result1);
+        let ApplesCat = [];
+        let HoneyCat = [];
+        let MangoesCat = [];
+        ApplesCat = result1.filter((e) => e.productType === "Apples");
+        setDataApples(ApplesCat);
+        HoneyCat = result1.filter((e) => e.productType === "Honey");
+        setDataHoney(HoneyCat);
+        MangoesCat = result1.filter((e) => e.productType === "Mangoes");
+        setDataMangoes(MangoesCat);
+        setLoad(false);
+      }
+    } catch (error) {
+      setLoad(false);
+    } finally {
+      setLoad(false);
     }
   };
 
@@ -215,25 +223,30 @@ const Template = ({ productTitle, productUnits, productImage }) => {
       modeMsg = mode === "add" ? "Inserted" : "Updated";
       let modeMsgErr = "";
       modeMsgErr = mode === "add" ? "Inserting" : "Updating";
+
       axios
         .post(endPoint, data, config)
         .then((res) => {
+          setLoad(true);
+          console.log("Data Posted::", data);
           console.log("Api post ::", res.status);
-          if (res.status === "200" || res.status === 200) {
-            console.log("Success Response!!!");
-            openNotification(
-              `Data ${modeMsg} Successfully for Product!!`,
-              ``,
-              "",
-              "success",
-              "topRight"
-            );
-            setTimeout(3000);
-            navigate.push("/QRCode");
-          }
+          setTimeout(() => {
+            if (res.status === "200" || res.status === 200) {
+              console.log("Success Response!!!");
+              openNotification(
+                `Data ${modeMsg} Successfully for Product!!`,
+                ``,
+                "",
+                "success",
+                "topRight"
+              );
+              navigate.push("/QRCode");
+            }
+          }, 4000);
         })
         .catch((error) => {
-          console.log("Error:", error);
+          console.log("Error occured:", error);
+          setLoad(true);
           openNotification(
             `Error: Issue in ${modeMsgErr}  Successfully!!`,
             ``,
@@ -241,10 +254,8 @@ const Template = ({ productTitle, productUnits, productImage }) => {
             "error",
             "topRight"
           );
-          // if (mode === "add") setTempData(createDataSchema);
-          // if (mode === "edit") setEditSaveInstance(updateDataSchema);
-          // forceUpdate();
-        });
+        })
+        .finally(setLoad(false));
     };
 
     await InsertEditAPI(endPoint, data, config);
@@ -343,370 +354,391 @@ const Template = ({ productTitle, productUnits, productImage }) => {
 
   return (
     <>
-      <div
-        style={{
-          width: "72vw",
-          height: "50vh",
-          borderBottom: "1px solid gray",
-        }}
-      >
-        <Collapse accordion>
-          <Panel header="Apples" key="1">
-            <div className="col-md-12 mt-1 items-details">
-              <table className="items-details-table">
-                <tr className="tb-header">
-                  <td className="col1">ID</td>
-                  <td className="col2" style={{ marginLeft: "3px" }}>
-                    Product Name
-                  </td>
-                  <td className="col3">Product Type</td>
-                  <td className="col4">Quantity (Kg)</td>
-                  <td className="col5">Temperature</td>
-                  <td className="col7 text-center">&nbsp;&nbsp;Action</td>
-                </tr>
-                <tr className="tb-body">
-                  <td className="col1">
-                    <Select
-                      mode="multiple"
-                      name="key"
-                      style={{
-                        width: "100%",
-                      }}
-                      // defaultValue={[ApplesCat[0].Id]}
-                      placeholder="--Select--"
-                      onChange={($event) => {
-                        setOptionList1($event);
-                        handleChangeRM1($event);
-                      }}
-                      optionLabelProp="label"
-                    >
-                      {dataApples.map((ele, idx) => (
-                        <>
-                          <Select.Option key={idx} value={ele.key}>
-                            <div className="demo-option-label-item">
-                              {ele.key}
-                            </div>
-                          </Select.Option>
-                        </>
-                      ))}
-                    </Select>
-                  </td>
-
-                  <td className="col2">
-                    <input
-                      type="text"
-                      name="productname"
-                      value={RMRow1.productname}
-                      onChange={handleRMRow1DataChange}
-                    />
-                  </td>
-                  <td className="col3">
-                    <input
-                      type="text"
-                      name="materialname"
-                      value={RMRow1?.materialname}
-                      onChange={($event) => handleRMRow1DataChange($event)}
-                    />
-                  </td>
-                  <td className="col4">
-                    <input
-                      type="text"
-                      name="materialquantity"
-                      value={RMRow1?.materialquantity}
-                      onChange={($event) => handleRMRow1DataChange($event)}
-                    />
-                  </td>
-                  <td className="col5">
-                    <input
-                      type="text"
-                      name="temp"
-                      value={RMRow1?.temp}
-                      onChange={($event) => handleRMRow1DataChange($event)}
-                    />
-                  </td>
-                  <td
-                    className="col7"
-                    style={{
-                      width: "6%",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    <RiSaveFill
-                      onClick={(e) => {
-                        if (!selectR1) {
-                          openNotification(
-                            `Please select the values from the select list - ${RMRow1.producttype}`,
-                            ``,
-                            "",
-                            "error",
-                            "topRight"
-                          );
-                          return false;
-                        } else {
-                          if (validateRow(RMRow1, optionList1))
-                            addMaterialApples(e);
-                        }
-                      }}
-                      title="Click here to add"
-                      className="updt-otps-edit"
-                      style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
-                        cursor: "pointer",
-                      }}
-                    ></RiSaveFill>{" "}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </Panel>
-          <Panel header="Honey" key="2">
-            <div className="col-md-12 mt-1 items-details">
-              <table className="items-details-table">
-                <tr className="tb-header">
-                  <td className="col1">ID</td>
-                  <td className="col2" style={{ marginLeft: "3px" }}>
-                    Product Name
-                  </td>
-                  <td className="col3">Honey Type</td>
-                  <td className="col4">Quantity (Litres)</td>
-                  <td className="col6">Temperature</td>
-                  <td className="col7 text-center">&nbsp;&nbsp;Action</td>
-                </tr>
-                <tr className="tb-body">
-                  <td className="col1">
-                    <Select
-                      mode="multiple"
-                      name="key"
-                      style={{
-                        width: "100%",
-                      }}
-                      placeholder="--Select--"
-                      onChange={($event) => {
-                        handleChangeRM2($event);
-                        setOptionList2($event);
-                      }}
-                      optionLabelProp="label"
-                    >
-                      {dataHoney.map((ele, idx) => (
-                        <>
-                          <Select.Option key={idx} value={ele.key}>
-                            <div className="demo-option-label-item">
-                              {ele.key}
-                            </div>
-                          </Select.Option>
-                        </>
-                      ))}
-                    </Select>
-                  </td>
-
-                  <td className="col2">
-                    <input
-                      type="text"
-                      name="productname"
-                      value={RMRow2.productname}
-                      onChange={($event) => handleRMRow2DataChange($event)}
-                    />
-                  </td>
-                  <td className="col3">
-                    <input
-                      type="text"
-                      name="materialname"
-                      value={RMRow2.materialname}
-                      onChange={($event) => handleRMRow2DataChange($event)}
-                    />
-                  </td>
-                  <td className="col4">
-                    <input
-                      type="text"
-                      name="materialquantity"
-                      value={RMRow2.materialquantity}
-                      onChange={($event) => handleRMRow2DataChange($event)}
-                    />
-                  </td>
-                  <td className="col5">
-                    <input
-                      type="text"
-                      name="temp"
-                      value={RMRow2.temp}
-                      onChange={($event) => handleRMRow2DataChange($event)}
-                    />
-                  </td>
-                  <td
-                    className="col7"
-                    style={{
-                      width: "6%",
-                      textAlign: "center",
-                      verticalAlign: "middle",
-                    }}
-                  >
-                    <RiSaveFill
-                      onClick={(e) => {
-                        if (!selectR2) {
-                          openNotification(
-                            `Please select the values from the select list - ${RMRow2.producttype}`,
-                            ``,
-                            "",
-                            "error",
-                            "topRight"
-                          );
-                          return false;
-                        } else {
-                          if (validateRow(RMRow2, optionList2))
-                            addMaterialHoney(e);
-                        }
-                      }}
-                      className="updt-otps-edit"
-                      style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
-                        cursor: "pointer",
-                      }}
-                    ></RiSaveFill>{" "}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </Panel>
-          <Panel header="Mangoes" key="3">
-            <div className="col-md-12 mt-1 items-details">
-              <table className="items-details-table">
-                <tr className="tb-header">
-                  <td className="col1">ID</td>
-                  <td className="col2" style={{ marginLeft: "3px" }}>
-                    Product Name
-                  </td>
-                  <td className="col3">Product Type</td>
-                  <td className="col4">Quantity (Kg)</td>
-                  <td className="col6">Temperature</td>
-                  <td className="col7 text-center">&nbsp;&nbsp;Action</td>
-                </tr>
-                <tr className="tb-body">
-                  <td className="col1">
-                    <Select
-                      mode="multiple"
-                      name="key"
-                      style={{
-                        width: "100%",
-                      }}
-                      placeholder="--Select--"
-                      onChange={($event) => {
-                        handleChangeRM3($event);
-                        setOptionList3($event);
-                      }}
-                      optionLabelProp="label"
-                    >
-                      {dataMangoes.map((ele, idx) => (
-                        <>
-                          <Select.Option key={idx} value={ele.key}>
-                            <div className="demo-option-label-item">
-                              {ele.key}
-                            </div>
-                          </Select.Option>
-                        </>
-                      ))}
-                    </Select>
-                  </td>
-
-                  <td className="col2">
-                    <input
-                      type="text"
-                      name="productname"
-                      value={RMRow3.productname}
-                      onChange={($event) => handleRMRow3DataChange($event)}
-                    />
-                  </td>
-                  <td className="col3">
-                    <input
-                      type="text"
-                      name="materialname"
-                      value={RMRow3.materialname}
-                      onChange={($event) => handleRMRow3DataChange($event)}
-                    />
-                  </td>
-                  <td className="col4">
-                    <input
-                      type="text"
-                      name="materialquantity"
-                      value={RMRow3.materialquantity}
-                      onChange={($event) => handleRMRow3DataChange($event)}
-                    />
-                  </td>
-                  <td className="col5">
-                    <input
-                      type="text"
-                      name="temp"
-                      value={RMRow3.temp}
-                      onChange={($event) => handleRMRow3DataChange($event)}
-                    />
-                  </td>
-                  <td className="col7" style={{ width: "8%", maxWidth: "10%" }}>
-                    <RiSaveFill
-                      onClick={(e) => {
-                        if (!selectR3) {
-                          openNotification(
-                            `Please select the values from the select list -${RMRow3.producttype}`,
-                            ``,
-                            "",
-                            "error",
-                            "topRight"
-                          );
-                          return false;
-                        } else {
-                          if (validateRow(RMRow3, optionList3))
-                            addMaterialMangoes(e);
-                        }
-                      }}
-                      title="Click here to add"
-                      className="updt-otps-edit"
-                      style={{
-                        width: "8%",
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                        marginLeft: "1rem",
-                        fontSize: "1.2rem",
-                        cursor: "pointer",
-                      }}
-                    ></RiSaveFill>{" "}
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </Panel>
-        </Collapse>
-        <div className="row mt-5">
-          <div className="col-md-1"></div>
-          <div className="col-md-4">
-            <button
-              style={{
-                background: "#043484",
-                maxWidth: "30%",
-                width: "90%",
-                height: "1.8rem",
-                fontSize: "0.7rem",
-                color: "#fff",
-                borderRadius: "5px",
-                border: "0!important",
-                alignContent: "center",
-                alignItems: "center",
-              }}
-              onClick={(e) => {
-                addNewProduct(e);
-              }}
-            >
-              Update
-            </button>
-          </div>
-          <div className="col-md-8"></div>
+      {load ? (
+        <div
+          style={{
+            width: "72vw",
+            height: "50vh",
+            borderBottom: "1px solid gray",
+            margin: "auto",
+          }}
+        >
+          <Spin
+            size="large"
+            style={{
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Alert
+              message="Data submitting to server"
+              description="Thank you for your patience"
+              type="info"
+            />
+          </Spin>
         </div>
-      </div>
+      ) : (
+        <div
+          style={{
+            width: "72vw",
+            height: "50vh",
+            borderBottom: "1px solid gray",
+          }}
+        >
+          <Collapse accordion>
+            <Panel header="Apples" key="1">
+              <div className="col-md-12 mt-1 items-details">
+                <table className="items-details-table">
+                  <tr className="tb-header">
+                    <td className="col1">ID</td>
+                    <td className="col2" style={{ marginLeft: "3px" }}>
+                      Product Name
+                    </td>
+                    <td className="col3">Product Type</td>
+                    <td className="col4">Quantity (Kg)</td>
+                    <td className="col5">Temperature</td>
+                    <td className="col7 text-center">&nbsp;&nbsp;Action</td>
+                  </tr>
+                  <tr className="tb-body">
+                    <td className="col1">
+                      <Select
+                        mode="multiple"
+                        name="key"
+                        style={{
+                          width: "100%",
+                        }}
+                        // defaultValue={[ApplesCat[0].Id]}
+                        placeholder="--Select--"
+                        onChange={($event) => {
+                          setOptionList1($event);
+                          handleChangeRM1($event);
+                        }}
+                        optionLabelProp="label"
+                      >
+                        {dataApples.map((ele, idx) => (
+                          <>
+                            <Select.Option key={idx} value={ele.key}>
+                              <div className="demo-option-label-item">
+                                {ele.key}
+                              </div>
+                            </Select.Option>
+                          </>
+                        ))}
+                      </Select>
+                    </td>
+
+                    <td className="col2">
+                      <input
+                        type="text"
+                        name="productname"
+                        value={RMRow1.productname}
+                        onChange={handleRMRow1DataChange}
+                      />
+                    </td>
+                    <td className="col3">
+                      <input
+                        type="text"
+                        name="materialname"
+                        value={RMRow1?.materialname}
+                        onChange={($event) => handleRMRow1DataChange($event)}
+                      />
+                    </td>
+                    <td className="col4">
+                      <input
+                        type="text"
+                        name="materialquantity"
+                        value={RMRow1?.materialquantity}
+                        onChange={($event) => handleRMRow1DataChange($event)}
+                      />
+                    </td>
+                    <td className="col5">
+                      <input
+                        type="text"
+                        name="temp"
+                        value={RMRow1?.temp}
+                        onChange={($event) => handleRMRow1DataChange($event)}
+                      />
+                    </td>
+                    <td
+                      className="col7"
+                      style={{
+                        width: "6%",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <RiSaveFill
+                        onClick={(e) => {
+                          if (!selectR1) {
+                            openNotification(
+                              `Please select the values from the select list - ${RMRow1.producttype}`,
+                              ``,
+                              "",
+                              "error",
+                              "topRight"
+                            );
+                            return false;
+                          } else {
+                            if (validateRow(RMRow1, optionList1))
+                              addMaterialApples(e);
+                          }
+                        }}
+                        title="Click here to configure."
+                        className="updt-otps-edit"
+                        style={{
+                          cursor: "pointer",
+                          marginLeft: ".7rem",
+                          fontSize: "0.68rem",
+                        }}
+                      ></RiSaveFill>{" "}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </Panel>
+            <Panel header="Honey" key="2">
+              <div className="col-md-12 mt-1 items-details">
+                <table className="items-details-table">
+                  <tr className="tb-header">
+                    <td className="col1">ID</td>
+                    <td className="col2" style={{ marginLeft: "3px" }}>
+                      Product Name
+                    </td>
+                    <td className="col3">Honey Type</td>
+                    <td className="col4">Quantity (Litres)</td>
+                    <td className="col6">Temperature</td>
+                    <td className="col7 text-center">&nbsp;&nbsp;Action</td>
+                  </tr>
+                  <tr className="tb-body">
+                    <td className="col1">
+                      <Select
+                        mode="multiple"
+                        name="key"
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="--Select--"
+                        onChange={($event) => {
+                          handleChangeRM2($event);
+                          setOptionList2($event);
+                        }}
+                        optionLabelProp="label"
+                      >
+                        {dataHoney.map((ele, idx) => (
+                          <>
+                            <Select.Option key={idx} value={ele.key}>
+                              <div className="demo-option-label-item">
+                                {ele.key}
+                              </div>
+                            </Select.Option>
+                          </>
+                        ))}
+                      </Select>
+                    </td>
+
+                    <td className="col2">
+                      <input
+                        type="text"
+                        name="productname"
+                        value={RMRow2.productname}
+                        onChange={($event) => handleRMRow2DataChange($event)}
+                      />
+                    </td>
+                    <td className="col3">
+                      <input
+                        type="text"
+                        name="materialname"
+                        value={RMRow2.materialname}
+                        onChange={($event) => handleRMRow2DataChange($event)}
+                      />
+                    </td>
+                    <td className="col4">
+                      <input
+                        type="text"
+                        name="materialquantity"
+                        value={RMRow2.materialquantity}
+                        onChange={($event) => handleRMRow2DataChange($event)}
+                      />
+                    </td>
+                    <td className="col5">
+                      <input
+                        type="text"
+                        name="temp"
+                        value={RMRow2.temp}
+                        onChange={($event) => handleRMRow2DataChange($event)}
+                      />
+                    </td>
+                    <td
+                      className="col7"
+                      style={{
+                        width: "6%",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      <RiSaveFill
+                        onClick={(e) => {
+                          if (!selectR2) {
+                            openNotification(
+                              `Please select the values from the select list - ${RMRow2.producttype}`,
+                              ``,
+                              "",
+                              "error",
+                              "topRight"
+                            );
+                            return false;
+                          } else {
+                            if (validateRow(RMRow2, optionList2))
+                              addMaterialHoney(e);
+                          }
+                        }}
+                        className="updt-otps-edit"
+                        style={{
+                          cursor: "pointer",
+                          marginLeft: ".7rem",
+                          fontSize: "0.68rem",
+                        }}
+                        title="Click here to configure."
+                      ></RiSaveFill>{" "}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </Panel>
+            <Panel header="Mangoes" key="3">
+              <div className="col-md-12 mt-1 items-details">
+                <table className="items-details-table">
+                  <tr className="tb-header">
+                    <td className="col1">ID</td>
+                    <td className="col2" style={{ marginLeft: "3px" }}>
+                      Product Name
+                    </td>
+                    <td className="col3">Product Type</td>
+                    <td className="col4">Quantity (Kg)</td>
+                    <td className="col6">Temperature</td>
+                    <td className="col7 text-center">&nbsp;&nbsp;Action</td>
+                  </tr>
+                  <tr className="tb-body">
+                    <td className="col1">
+                      <Select
+                        mode="multiple"
+                        name="key"
+                        style={{
+                          width: "100%",
+                        }}
+                        placeholder="--Select--"
+                        onChange={($event) => {
+                          handleChangeRM3($event);
+                          setOptionList3($event);
+                        }}
+                        optionLabelProp="label"
+                      >
+                        {dataMangoes.map((ele, idx) => (
+                          <>
+                            <Select.Option key={idx} value={ele.key}>
+                              <div className="demo-option-label-item">
+                                {ele.key}
+                              </div>
+                            </Select.Option>
+                          </>
+                        ))}
+                      </Select>
+                    </td>
+
+                    <td className="col2">
+                      <input
+                        type="text"
+                        name="productname"
+                        value={RMRow3.productname}
+                        onChange={($event) => handleRMRow3DataChange($event)}
+                      />
+                    </td>
+                    <td className="col3">
+                      <input
+                        type="text"
+                        name="materialname"
+                        value={RMRow3.materialname}
+                        onChange={($event) => handleRMRow3DataChange($event)}
+                      />
+                    </td>
+                    <td className="col4">
+                      <input
+                        type="text"
+                        name="materialquantity"
+                        value={RMRow3.materialquantity}
+                        onChange={($event) => handleRMRow3DataChange($event)}
+                      />
+                    </td>
+                    <td className="col5">
+                      <input
+                        type="text"
+                        name="temp"
+                        value={RMRow3.temp}
+                        onChange={($event) => handleRMRow3DataChange($event)}
+                      />
+                    </td>
+                    <td
+                      className="col7"
+                      style={{ width: "8%", maxWidth: "10%" }}
+                    >
+                      <RiSaveFill
+                        onClick={(e) => {
+                          if (!selectR3) {
+                            openNotification(
+                              `Please select the values from the select list -${RMRow3.producttype}`,
+                              ``,
+                              "",
+                              "error",
+                              "topRight"
+                            );
+                            return false;
+                          } else {
+                            if (validateRow(RMRow3, optionList3))
+                              addMaterialMangoes(e);
+                          }
+                        }}
+                        className="updt-otps-edit"
+                        style={{
+                          cursor: "pointer",
+                          marginLeft: ".7rem",
+                          fontSize: "0.68rem",
+                        }}
+                        title="Click here to configure."
+                      ></RiSaveFill>{" "}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </Panel>
+          </Collapse>
+          <div className="row mt-5">
+            <div className="col-md-1"></div>
+            <div className="col-md-4">
+              <button
+                style={{
+                  background: "#043484",
+                  maxWidth: "30%",
+                  width: "90%",
+                  height: "1.8rem",
+                  fontSize: "0.7rem",
+                  color: "#fff",
+                  borderRadius: "5px",
+                  border: "0!important",
+                  alignContent: "center",
+                  alignItems: "center",
+                }}
+                onClick={(e) => {
+                  addNewProduct(e);
+                }}
+              >
+                Update
+              </button>
+            </div>
+            <div className="col-md-8"></div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

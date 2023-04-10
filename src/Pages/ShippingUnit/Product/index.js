@@ -2,11 +2,7 @@ import React, { useEffect, useState, useReducer } from "react";
 import { IoMdArrowRoundBack } from "react-icons/io";
 import img1 from "../../../Assests/images/702-7027868_picture-of-cadbury-dairy-milk-silk-roast-almond-removebg-preview 1.png";
 
-// import img2 from '../../Assests/images/image 1.png';
-import qrImg from "../../../Assests/images/QR.svg";
-import MakeQRCode from "qrcode";
-
-import { notification } from "antd";
+import { Alert, Spin, notification } from "antd";
 import { PrerequistiesConfig, PrerequistiesInsUpd } from "../ApiUtility.js";
 import axios from "axios";
 import TableCheckBox from "./TableCheckBox";
@@ -68,70 +64,6 @@ const QRCode = () => {
     });
     console.log("ItemData ", itemData);
   }, [reducerValue]);
-  //
-
-  const generateQRCode = async (event, id) => {
-    event.preventDefault();
-    console.log("Id :", id);
-
-    const inputParam = {
-      key: id,
-      status: "CREATED",
-    };
-
-    // const response = await QRCode.toDataURL(inputParam.key);
-    // setQrCodeImg(response);
-
-    await addProduct1(inputParam, "add");
-  };
-
-  const addProduct1 = async (productObject, mode) => {
-    console.log("Enter generateQRCode");
-
-    const inputParams = {
-      args: productObject,
-      fcn: "qrCreate",
-      defaultpeers: ["peer0.org1.example.com", "peer0.org2.example.com"],
-      actiontype: "POST",
-    };
-    //Code to add Api logic
-    var { endPoint, data, config } = PrerequistiesInsUpd(inputParams);
-    //console.log("AddProduct Object :::", productObject);
-
-    const InsertEditAPI = async (endPoint, data, config) => {
-      axios
-        .post(endPoint, data, config)
-        .then((res) => {
-          console.log("Api post ::", res.status);
-          if (res.status === "200" || res.status === 200) {
-            console.log("Success Response!!!");
-            openNotification(
-              `QR Code created Successfully for ${productObject.key}!!`,
-              ``,
-              "",
-              "success",
-              "topRight"
-            );
-            setItemData([]);
-
-            forceUpdate();
-          }
-        })
-        .catch((error) => {
-          console.log("Error:", error);
-          openNotification(
-            `Oops!! Error: Issue in creating the QR Code for ${productObject.key} !!`,
-            ``,
-            "",
-            "error",
-            "topRight"
-          );
-          forceUpdate();
-        });
-    };
-
-    await InsertEditAPI(endPoint, data, config);
-  };
 
   return (
     <div className="full-layout-right-body mb-3">
@@ -139,9 +71,7 @@ const QRCode = () => {
         <div className="_40_percent pagetitle">
           <span className="pagetitle">Shipping Unit</span>
         </div>
-        <div className="_60_percent" style={{ position: "relative" }}>
-          {/* <input type="map" stye={{ position:'absolute !important',right:0 }}placeholder="Search"/> &nbsp;&nbsp; &nbsp;&nbsp; */}
-        </div>
+        <div className="_60_percent" style={{ position: "relative" }}></div>
       </div>
       <div className="mid-right-body mt-3">
         <div className="left-title">
@@ -163,7 +93,6 @@ const QRCode = () => {
           </div>
         </div>
       )}
-
       {infoMessage !== "Error" && itemData.length === 0 && (
         <div className="right-body">
           <div className="row mt-4 mb-2">

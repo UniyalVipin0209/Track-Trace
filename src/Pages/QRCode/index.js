@@ -5,7 +5,7 @@ import img1 from "../../Assests/images/702-7027868_picture-of-cadbury-dairy-milk
 // import img2 from '../../Assests/images/image 1.png';
 import qrImg from "../../Assests/images/QR.svg";
 
-import { notification } from "antd";
+import { notification, Spin, Alert } from "antd";
 import { PrerequistiesConfig, PrerequistiesInsUpd } from "./ApiUtility.js";
 import axios from "axios";
 import MakeQRCode from "qrcode";
@@ -25,6 +25,7 @@ const openNotification = (_notificationTitle, _desc, msg, _type, placement) => {
 };
 
 const QRCode = () => {
+  const [load, setLoad] = useState(false);
   const [itemData, setItemData] = useState([]);
   const [reducerValue, forceUpdate] = useReducer((x) => x + 1, 0);
   const [infoMessage, setInfoMessage] = useState("");
@@ -36,6 +37,7 @@ const QRCode = () => {
 
   const generateQRCode = async (event, inputParams, index) => {
     event.preventDefault();
+
     const response = await MakeQRCode.toDataURL(inputParams);
     console.log("response 1 :", response);
     setQrCodeImg(response);
@@ -85,9 +87,6 @@ const QRCode = () => {
           productId: elem.Key,
           productName: responseObject.productName,
           action: responseObject.status,
-          // productImg: responseObject.hasOwnProperty("productImage")
-          //   ? window.decodeURI(responseObject.productImage)
-          //   : img1,
           productImg: window.decodeURI(responseObject.productImage),
           productUnits: parseInt(responseObject.productunits),
 
@@ -136,35 +135,42 @@ const QRCode = () => {
     //console.log("AddProduct Object :::", productObject);
 
     const InsertEditAPI = async (endPoint, data, config) => {
-      axios
-        .post(endPoint, data, config)
-        .then((res) => {
-          console.log("Api post ::", res.status);
-          if (res.status === "200" || res.status === 200) {
-            console.log("Success Response!!!");
+      setTimeout(() => {
+        axios
+          .post(endPoint, data, config)
+          .then((res) => {
+            setLoad(true);
+            console.log("Api post ::", res.status);
+
+            if (res.status === "200" || res.status === 200) {
+              setLoad(false);
+              setItemData([]);
+
+              console.log("Success Response!!!");
+              openNotification(
+                `QR Code created Successfully for ${productObject.key}!!`,
+                ``,
+                "",
+                "success",
+                "topRight"
+              );
+              forceUpdate();
+            }
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+            setLoad(true);
             openNotification(
-              `QR Code created Successfully for ${productObject.key}!!`,
+              `Oops!! Error: Issue in creating the QR Code for ${productObject.key} !!`,
               ``,
               "",
-              "success",
+              "error",
               "topRight"
             );
-            setItemData([]);
-
             forceUpdate();
-          }
-        })
-        .catch((error) => {
-          console.log("Error:", error);
-          openNotification(
-            `Oops!! Error: Issue in creating the QR Code for ${productObject.key} !!`,
-            ``,
-            "",
-            "error",
-            "topRight"
-          );
-          forceUpdate();
-        });
+          })
+          .finally(setLoad(true));
+      }, 4200);
     };
 
     await InsertEditAPI(endPoint, data, config);
@@ -192,82 +198,116 @@ const QRCode = () => {
       </div>
       {/* F9F9F9 */}
 
-      {infoMessage !== "Error" && (
-        <div className="right-body">
-          {itemData.map((data, index) => (
+      {load && (
+        <>
+          <div className="right-body">
             <div className="row mt-2">
               <div className="col-md-12">
-                <div className="row graycolor">
-                  <div className="col-md-2 text-center mt-2">
-                    <img
-                      src={data.productImg}
-                      style={{ width: "5rem" }}
-                      alt={data.productName}
-                    />
-                  </div>
-                  <div className="col-md-3">
-                    <div className=" p-box-title mt-3">
-                      <div className="p-name">
-                        <span className="productname">{data.productName}</span>
-                      </div>
-                      <div className="p-units">
-                        <span className="productname">
-                          {data.productUnits} Units
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-2">
-                    <div className="pid mt-3">ID: {data.productId}</div>
-                  </div>
-                  <div className="col-md-2">
-                    <div className="qr-status mt-3">
-                      {/* CREATE_QRCODE */}
-                      {data.action === "CREATE_QRCODE" ? (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            // UpdateStatus(e, data.productId);
-                            generateQRCode(e, data.productId, index);
-                          }}
-                          className="btn-link qr-status"
-                          style={{
-                            textDecoration: "none",
-                            fontSize: "0.62rem!important",
-                            padding: "0!important",
-                            color: "green",
-                            border: "none",
-                          }}
-                        >
-                          Create QR Code
-                        </button>
-                      ) : (
-                        <strong style={{ padding: "1px 6px", color: "green" }}>
-                          Created
-                        </strong>
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-md-3">
-                    {data.action === "CREATE_QRCODE" ? (
-                      ""
-                    ) : (
-                      <div className="text-center">
-                        {data.productQRCode && (
-                          <img
-                            src={data.productQRCode}
-                            style={{ width: "4.8rem" }}
-                            alt={data.productName}
-                          />
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <Spin
+                  size="large"
+                  style={{
+                    display: "flex",
+                    alignContent: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Alert
+                    message="Data submitting to server"
+                    description="Thank you for your patience"
+                    type="info"
+                  />
+                </Spin>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        </>
+      )}
+
+      {!load && (
+        <>
+          {infoMessage !== "Error" && (
+            <div className="right-body">
+              {itemData.map((data, index) => (
+                <div className="row mt-2">
+                  <div className="col-md-12">
+                    <div className="row graycolor">
+                      <div className="col-md-2 text-center mt-2">
+                        <img
+                          src={data.productImg}
+                          style={{ width: "5rem" }}
+                          alt={data.productName}
+                        />
+                      </div>
+                      <div className="col-md-3">
+                        <div className=" p-box-title mt-3">
+                          <div className="p-name">
+                            <span className="productname">
+                              {data.productName}
+                            </span>
+                          </div>
+                          <div className="p-units">
+                            <span className="productname">
+                              {data.productUnits} Units
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-md-2">
+                        <div className="pid mt-3">ID: {data.productId}</div>
+                      </div>
+                      <div className="col-md-2">
+                        <div className="qr-status mt-3">
+                          {/* CREATE_QRCODE */}
+                          {data.action === "CREATE_QRCODE" ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                // UpdateStatus(e, data.productId);
+                                setLoad(true);
+                                generateQRCode(e, data.productId, index);
+                              }}
+                              className="btn-link qr-status"
+                              style={{
+                                textDecoration: "none",
+                                fontSize: "0.62rem!important",
+                                padding: "0!important",
+                                color: "green",
+                                border: "none",
+                              }}
+                            >
+                              Create QR Code
+                            </button>
+                          ) : (
+                            <strong
+                              style={{ padding: "1px 6px", color: "green" }}
+                            >
+                              Created
+                            </strong>
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        {data.action === "CREATE_QRCODE" ? (
+                          ""
+                        ) : (
+                          <div className="text-center">
+                            {data.productQRCode && (
+                              <img
+                                src={data.productQRCode}
+                                style={{ width: "4.8rem" }}
+                                alt={data.productName}
+                              />
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
     </div>
   );

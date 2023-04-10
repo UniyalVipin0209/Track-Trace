@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Table } from "antd";
+import { Alert, Spin, Button, Table } from "antd";
 import { PrerequistiesInsUpd } from "../ApiUtility.js";
 import axios from "axios";
 import { useState } from "react";
@@ -73,6 +73,7 @@ const columns1 = [
 
 const columns = columns1.filter((i) => i.hidden === false);
 const TableCheckBox = ({ dataSource }) => {
+  const [load, setLoad] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedfilteredRows, setSelectedfilteredRows] = useState([]);
   const [sumOfUnits, setsumOfUnits] = useState("");
@@ -111,17 +112,19 @@ const TableCheckBox = ({ dataSource }) => {
     // console.log("AddProduct Object :::", productObject);
     // console.log("data ", data);
     // console.log("endPoint, data, config ", endPoint, data, config);
+
     const InsertEditAPI = async (endPoint, data, config) => {
       let modeMsg = {};
       modeMsg = mode === "add" ? "Inserted" : "Updated";
       let modeMsgErr = "";
       modeMsgErr = mode === "add" ? "Inserting" : "Updating";
+
       axios
         .post(endPoint, data, config)
         .then((res) => {
           console.log("Api post ::", res.status);
+
           if (res.status === "200" || res.status === 200) {
-            // console.log("Success Response!!!");
             openNotification(
               `Data ${modeMsg} Successfully for Product!!`,
               ``,
@@ -129,18 +132,9 @@ const TableCheckBox = ({ dataSource }) => {
               "success",
               "topRight"
             );
-
-            navigate.push("/CartonPackedProd");
-            // if (mode === "add") {
-            //   setTempData(postCreation);
-            //   setEditSaveInstance(updateDataSchema);
-            // }
-            // if (mode === "edit") {
-            //   setEditSaveInstance(updateDataSchema);
-            //   setTempData(createDataSchema);
-            // }
-            // forceUpdate();
           }
+
+          navigate.push("/CartonPackedProd");
         })
         .catch((error) => {
           console.log("Error:", error);
@@ -151,12 +145,9 @@ const TableCheckBox = ({ dataSource }) => {
             "error",
             "topRight"
           );
-          // if (mode === "add") setTempData(createDataSchema);
-          // if (mode === "edit") setEditSaveInstance(updateDataSchema);
-          // forceUpdate();
-        });
+        })
+        .finally(setLoad(false));
     };
-
     await InsertEditAPI(endPoint, data, config);
   };
   const addToCartons = (event) => {
@@ -177,6 +168,7 @@ const TableCheckBox = ({ dataSource }) => {
       return;
     } else {
       let details = [];
+
       details = selectedfilteredRows.map((ele1) => {
         let ele = ele1[0];
 
@@ -197,7 +189,10 @@ const TableCheckBox = ({ dataSource }) => {
         details: details,
       };
       console.log("Final Stat bf add", objectInput);
-      addProductsToCarton(objectInput, "add");
+
+      setTimeout(() => {
+        addProductsToCarton(objectInput, "add");
+      }, 4100);
     }
   };
   const onSelectChange = (newSelectedRowKeys) => {
@@ -224,6 +219,7 @@ const TableCheckBox = ({ dataSource }) => {
             className="btnUpdate"
             onClick={(e) => {
               console.log("Carton ....");
+              setLoad(true);
               addToCartons(e);
             }}
           >
@@ -240,19 +236,42 @@ const TableCheckBox = ({ dataSource }) => {
           </div>
         </div>
       </div>
-      <div className="row">
-        <Table
-          // className="mt-1 row"
-          // rowClassName="data-row"
-          size="medium"
-          rowSelection={rowSelection}
-          columns={columns}
-          dataSource={dataSource}
-          showHeader={false}
-          pagination={true}
-          scroll={{ y: 380 }}
-        />
-      </div>
+      {load && (
+        <div className="row">
+          <div className="col-10 m-auto">
+            <Spin
+              size="large"
+              style={{
+                display: "flex",
+                alignContent: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Alert
+                message="Data submitting to server"
+                description="Thank you for your patience"
+                type="info"
+              />
+            </Spin>
+          </div>
+        </div>
+      )}
+      {!load && (
+        <div className="row">
+          <Table
+            // className="mt-1 row"
+            // rowClassName="data-row"
+            size="medium"
+            rowSelection={rowSelection}
+            columns={columns}
+            dataSource={dataSource}
+            showHeader={false}
+            pagination={true}
+            scroll={{ y: 380 }}
+          />
+        </div>
+      )}
+
       <div className="row mt-2"></div>
     </>
   );

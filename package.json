@@ -43,6 +43,7 @@
     "react-stickynode": "^4.0.0",
     "react-toastify": "^8.2.0",
     "react-tooltip": "^4.2.21",
+    "react-vertical-timeline-component": "3.3.3",
     "redux": "^4.1.2",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
